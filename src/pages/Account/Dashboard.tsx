@@ -4,9 +4,11 @@ import PasswordList from './PasswordList'
 
 interface PwdItem {
     id: number,
+    name: string,
     website: string,
     username: string,
-    password: string
+    password: string,
+    comment: string
 }
 
 function Dashboard() {
@@ -14,21 +16,27 @@ function Dashboard() {
     const pwdList: Array<PwdItem> = [
         {
             "id": 0,
+            "name": "Test",
             "website": "Test",
             "username": "bada",
-            "password": "passwordTest"
+            "password": "passwordTest",
+            "comment": ""
         },
         {
             "id": 1,
+            "name": "Test2",
             "website": "Test2",
             "username": "bada2",
-            "password": "passwordTest2"
+            "password": "passwordTest2",
+            "comment": ""
         },
         {
             "id": 2,
+            "name": "Test3",
             "website": "Test3",
             "username": "bada3",
-            "password": "passwordTest3"
+            "password": "passwordTest3",
+            "comment": ""
         },
     ];
 

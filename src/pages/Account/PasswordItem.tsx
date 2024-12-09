@@ -3,9 +3,11 @@ import { TbEyeOff, TbEye } from "react-icons/tb";
 
 interface PwdItem {
     id: number,
+    name: string,
     website: string,
     username: string,
-    password: string
+    password: string,
+    comment: string
 }
 
 function PasswordItem({item = null} : {item: PwdItem}) {
@@ -14,6 +16,10 @@ function PasswordItem({item = null} : {item: PwdItem}) {
   return (
     <li>
         <div className='flex'>
+            <p>
+                {item.name}
+            </p>
+            -
             <p>
                 {item.website}
             </p>
@@ -24,7 +30,11 @@ function PasswordItem({item = null} : {item: PwdItem}) {
             -
             <p className={show? '' : 'password_field'}>
                 {item.password}
-            </p>  
+            </p>
+            -
+            <p>
+                {item.comment}
+            </p>
         </div>
         <div>
             <span className='flex justify-around items-center' onClick={() => setShow(!show)}>
