@@ -1,19 +1,11 @@
 import React from 'react'
 import Header from './Header'
 import PasswordList from './PasswordList'
-
-interface PwdItem {
-    id: number,
-    name: string,
-    website: string,
-    username: string,
-    password: string,
-    comment: string
-}
+import { PwdArray } from '../../types/pwdTypes';
 
 function Dashboard() {
 
-    const pwdList: Array<PwdItem> = [
+    const pwdList: PwdArray = [
         {
             "id": 0,
             "name": "Test",

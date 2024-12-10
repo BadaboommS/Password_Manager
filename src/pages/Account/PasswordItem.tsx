@@ -10,7 +10,7 @@ interface PwdItem {
     comment: string
 }
 
-function PasswordItem({item = null} : {item: PwdItem}) {
+function PasswordItem({ item = null } : {item: PwdItem}) {
     const [show, setShow] = useState(false);
 
   return (

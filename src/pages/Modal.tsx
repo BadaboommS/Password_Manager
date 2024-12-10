@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-const Modal = ({ open, children }) => {
+const Modal = ({ open, children } : {open: boolean, children: React.ReactNode}) => {
     if(!open) return null
     return ReactDom.createPortal(
         <>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import ALayout from './ALayout';
 import Dashboard from './Dashboard';
@@ -11,8 +11,8 @@ const AccountRouter = () => {
     <ReservationContextProvider>
       <Routes>
         <Route element={<ALayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path='*' element={<Error />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path='/*' element={<Error />} />
         </Route>
       </Routes>
     </ReservationContextProvider>

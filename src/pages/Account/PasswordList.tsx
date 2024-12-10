@@ -1,16 +1,8 @@
 import React from 'react'
 import PasswordItem from './PasswordItem'
+import { PwdItem, PwdArray } from '../../types/pwdTypes'
 
-interface PwdItem {
-  id: number,
-  name: string,
-  website: string,
-  username: string,
-  password: string,
-  comment: string
-}
-
-function PasswordList({ pwdList= []} : {pwdList: Array<PwdItem> }) {
+function PasswordList({ pwdList= []} : {pwdList: PwdArray }) {
   return (
     <ul>
         {pwdList.map((pwd: PwdItem, i: number) => {

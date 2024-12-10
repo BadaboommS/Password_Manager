@@ -1,20 +1,21 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { accountService } from '../../services/account.service';
+import { useNavigate } from 'react-router';
+//import { accountService } from '../../services/account.service';
 import Modal from '../Modal';
 
 const Login = () => {
   const [password, setPassword] = useState('');
   const [loadingModal, setLoadingModal] = useState(false);
   const [fetchError, setFetchError] = useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
-  function handleSubmit(e){
+  function handleSubmit(e: React.ChangeEvent<HTMLFormElement>){
     e.preventDefault();
     setFetchError(false);
-    setLoadingModal(true);
+    //setLoadingModal(true);
 
-    accountService.login(password)
+    navigate("/account", {replace: true});
+    /* accountService.login(password)
       .then(res => {
         accountService.saveToken(res.data.access_token, res.data.user);
         navigate("/account", {replace: true});
@@ -23,7 +24,7 @@ const Login = () => {
         setLoadingModal(false);
         setFetchError(true);
         console.log(error);
-      })
+      }) */
   }
 
   return (

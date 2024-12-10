@@ -1,16 +1,19 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Routes, Route } from 'react-router'
 import Error from '../../utils/Error'
 import Login from './Login'
 
 const PublicRouter = () => {
+
+  useEffect(() => {
+    console.log("Render Public");
+  }, []);
+
   return (
     <Routes>
-        <Route index element={<Login />} />
-
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        
-        <Route path='*' element={<Error />} />
+        <Route path='/*' element={<Error />} />
     </Routes>
   )
 }
