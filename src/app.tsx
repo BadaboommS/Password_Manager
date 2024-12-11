@@ -1,6 +1,7 @@
 import React from 'react'
 import * as ReactDOM from 'react-dom/client';
 import { Routes, Route, HashRouter } from 'react-router';
+import './style/main.css';
 import PublicRouter from './pages/Public/PublicRouter';
 import AccountRouter from './pages/Account/AccountRouter';
 import AuthGuard from './helpers/AuthGuard';
