@@ -1,14 +1,6 @@
 import React, { useState } from 'react'
 import { TbEyeOff, TbEye } from "react-icons/tb";
-
-interface PwdItem {
-    id: number,
-    name: string,
-    website: string,
-    username: string,
-    password: string,
-    comment: string
-}
+import { PwdItem } from '../../types/pwdTypes';
 
 function PasswordItem({ item = null } : {item: PwdItem}) {
     const [show, setShow] = useState(false);

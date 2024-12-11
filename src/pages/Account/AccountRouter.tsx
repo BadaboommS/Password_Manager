@@ -4,18 +4,18 @@ import { Route, Routes } from 'react-router';
 import ALayout from './ALayout';
 import Dashboard from './Dashboard';
 import Error from '../../utils/Error';
-import ReservationContextProvider from '../../context/ContextProvider';
+import PasswordContextProvider from '../../context/PasswordContextProvider';
 
 const AccountRouter = () => {
   return (
-    <ReservationContextProvider>
+    <PasswordContextProvider>
       <Routes>
         <Route element={<ALayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path='/*' element={<Error />} />
         </Route>
       </Routes>
-    </ReservationContextProvider>
+    </PasswordContextProvider>
   )
 }
 

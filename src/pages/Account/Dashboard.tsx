@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Header from './Header'
 import PasswordList from './PasswordList'
+import { PasswordContext } from '../../context/PasswordContextProvider'
 import { PwdArray } from '../../types/pwdTypes';
 
 function Dashboard() {
+    const { passwordList, setPasswordList }: {passwordList: PwdArray, setPasswordList: void} = useContext(PasswordContext);
 
-    const pwdList: PwdArray = [
+    /* const test: PwdArray = [
         {
             "id": 0,
             "name": "Test",
@@ -30,12 +32,12 @@ function Dashboard() {
             "password": "passwordTest3",
             "comment": ""
         },
-    ];
+    ]; */
 
     return (
         <div>
             <Header></Header>
-            <PasswordList pwdList={ pwdList }></PasswordList>
+            <PasswordList list={ passwordList }></PasswordList>
         </div>
     )
 }
