@@ -1,11 +1,12 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
 
 export const PasswordContext = createContext(null);
 
 export default function PasswordContextProvider ({ children }: { children: React.ReactNode }) {
-  const [passwordList, setPasswordList] = useState<PwdArray>([
-    {
+  const [passwordList, setPasswordList] = useState<PwdArray>([]);
+
+  /* {
         "id": 0,
         "name": "Test",
         "website": "Test",
@@ -28,8 +29,19 @@ export default function PasswordContextProvider ({ children }: { children: React
         "username": "bada3",
         "password": "passwordTest3",
         "comment": ""
-    },
-]);
+    }, */
+
+  async function getPwdData(){
+    return await window.electronAPI.getUserPwdData();
+  }
+  
+  useEffect(() => {
+      try{
+        getPwdData().then(d => setPasswordList(d));
+      }catch(err){
+        console.log(`Error in Context component ${err}`);
+      }
+    }, []);
 
 
   return (

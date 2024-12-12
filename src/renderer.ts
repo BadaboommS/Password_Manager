@@ -28,13 +28,3 @@
 
 import './index.css';
 import './App';
-
-document.addEventListener('DOMContentLoaded', () => {
-    const myBtn = document.getElementById("myBtn");
-    myBtn.addEventListener('click', () => {
-        const txtBox = <HTMLInputElement> document.getElementById("myTxt");
-        const txtValue = txtBox.value;
-
-        window.electronAPI.saveText(txtValue); //call method from electron api
-    })
-})

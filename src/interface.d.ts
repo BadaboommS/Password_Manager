@@ -1,5 +1,9 @@
+import { PwdArray, PwdItem } from "./types/pwdTypes"
+
 export interface IElectronAPI {
-    saveText: (value: string) => Promise<void>,
+    addUserPwdData: (value: PwdItem) => Promise<void>,
+    getUserPwdData: () => Promise<PwdArray>,
+    getUserPwdResponse: (data: PwdArray) => PwdArray
 }
 
 declare global{
