@@ -1,36 +1,16 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, SetStateAction, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
 
-export const PasswordContext = createContext(null);
+interface PasswordContextInterface {
+  passwordList: PwdArray,
+  setPasswordList: React.Dispatch<SetStateAction<PwdArray>>
+}
+
+export const PasswordContext = createContext<PasswordContextInterface>(null);
 
 export default function PasswordContextProvider ({ children }: { children: React.ReactNode }) {
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
-
-  /* {
-        "id": 0,
-        "name": "Test",
-        "website": "Test",
-        "username": "bada",
-        "password": "passwordTest",
-        "comment": ""
-    },
-    {
-        "id": 1,
-        "name": "Test2",
-        "website": "Test2",
-        "username": "bada2",
-        "password": "passwordTest2",
-        "comment": ""
-    },
-    {
-        "id": 2,
-        "name": "Test3",
-        "website": "Test3",
-        "username": "bada3",
-        "password": "passwordTest3",
-        "comment": ""
-    }, */
-
+  
   async function getPwdData(){
     return await window.electronAPI.getUserPwdData();
   }
