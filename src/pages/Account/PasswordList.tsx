@@ -4,19 +4,19 @@ import { PwdItem } from '../../types/pwdTypes'
 import { PasswordContext } from '../../context/PasswordContextProvider'
 
 function PasswordList() {
-  const { passwordList, setPasswordList } = useContext(PasswordContext);
+  const { passwordList, handlePasswordListChange } = useContext(PasswordContext);
 
   function editPasswordEntry(editPwd: PwdItem): void{
-    const pwdList = [...passwordList];
-    const editPwdIndex = pwdList.findIndex((obj:PwdItem) => obj.id === editPwd.id);
-    pwdList[editPwdIndex] = editPwd;
-    setPasswordList(pwdList);
+    const newPwdArray = [...passwordList];
+    const editPwdIndex = newPwdArray.findIndex((obj:PwdItem) => obj.id === editPwd.id);
+    newPwdArray[editPwdIndex] = editPwd;
+    handlePasswordListChange(newPwdArray);
   }
 
-  function deletePasswordEntry(deletePwd: PwdItem): void{
+  function deletePasswordEntry(deletePwdId: number): void{
     const pwdList = [...passwordList];
-    const newPwdArray = pwdList.filter((obj:PwdItem) => obj.id !== deletePwd.id);
-    setPasswordList(newPwdArray);
+    const newPwdArray = pwdList.filter((obj:PwdItem) => obj.id !== deletePwdId);
+    handlePasswordListChange(newPwdArray);
   }
 
   return (
@@ -35,7 +35,7 @@ function PasswordList() {
       <tbody>
         {(passwordList[0])
         ? (passwordList.map((pwd: PwdItem, i: number) => {
-              return (pwd !== null) ? <PasswordItem item={pwd} key={i} handleEdit={editPasswordEntry} handleDelete={deletePasswordEntry}></PasswordItem> : <></>
+              return (pwd !== null) ? <PasswordItem item={pwd} key={i} editPasswordEntry={editPasswordEntry} deletePasswordEntry={deletePasswordEntry}></PasswordItem> : <></>
           }))
         : <></>
       }

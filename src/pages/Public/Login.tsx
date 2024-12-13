@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router';
 //import { accountService } from '../../services/account.service';
-import Modal from '../Modal';
+import Modal from '../../global/Modal';
 
 const Login = () => {
   const [password, setPassword] = useState('');

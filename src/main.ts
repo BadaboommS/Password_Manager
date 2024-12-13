@@ -57,9 +57,9 @@ app.on('activate', () => {
 // code. You can also put them in separate files and import them here.
 
 //Data Storage function for main process
-ipcMain.on("addUserPwdData", (e, txtValue) => {
+ipcMain.on("writeUserPwdData", (e, pwdData) => {
   try{
-    writeUserData(txtValue);
+    writeUserData(pwdData);
   }catch(err){
     console.log(`Something went wrong in main process: ${e} - ${err}`);
   }
