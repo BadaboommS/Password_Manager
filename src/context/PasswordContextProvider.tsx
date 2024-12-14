@@ -1,10 +1,9 @@
-import React, { createContext, SetStateAction, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
 
 interface PasswordContextInterface {
   passwordList: PwdArray,
-  handlePasswordListChange: (a: PwdArray) => void,
-  //setPasswordList: React.Dispatch<SetStateAction<PwdArray>>
+  handlePasswordListChange: (a: PwdArray) => void
 }
 
 export const PasswordContext = createContext<PasswordContextInterface>(null);

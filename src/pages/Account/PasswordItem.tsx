@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { FaEdit, FaCopy } from "react-icons/fa";
 import { TbEyeOff, TbEye } from "react-icons/tb";
 import { MdCancel, MdDelete, MdDone } from "react-icons/md";
 import { PwdItem } from '../../types/pwdTypes';
@@ -25,17 +26,25 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
           return null
       }
 
-      setShowEdit(false);
+      const form = e.currentTarget;
+      const formElements = form.elements as typeof form.elements & {
+        name: {value :string};
+        website: {value :string};
+        username: {value :string};
+        password: {value :string};
+        comment: {value :string};
+      }
 
       const editedPwd = {
         id: item.id,
-        name: e.target.name.value,
-        website: e.target.website.value,
-        username: e.target.username.value,
-        password: e.target.password.value,
-        comment: e.target.comment.value
+        name: formElements.name.value,
+        website: formElements.website.value,
+        username: formElements.username.value,
+        password: formElements.password.value,
+        comment: formElements.comment.value
       };
 
+      setShowEdit(false);
       editPasswordEntry(editedPwd);
     }
 
@@ -45,7 +54,6 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
       }
       
       setShowEdit(false);
-
       deletePasswordEntry(pwdId);
     }
       
@@ -55,28 +63,25 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
         <td>{item.name}</td>
         <td>{item.website}</td>
         <td>{item.username}</td>
-        <td><div className='flex justify-around'><p className={showPrivatePassword? '' : 'password_field'}>{item.password}</p><button onClick={() => copyTextToClipboard(item.password)}>Copy</button></div></td>
+        <td><div className='flex justify-around'><p className={showPrivatePassword? '' : 'password_field'}>{item.password}</p><button onClick={() => copyTextToClipboard(item.password)} title="Copy"><FaCopy size='24'/></button></div></td>
         <td>{item.comment}</td>
         <td>
-            <div>
-                <span className='flex justify-around items-center' onClick={() => setShowPrivatePassword(!showPrivatePassword)}>
-                    {showPrivatePassword? <TbEye className="absolute mr-10" size={25}/> : <TbEyeOff className="absolute mr-10" size={25}/>}
-                </span>
-                <button onClick={() => setShowEdit(!showEdit)}>Edit</button>
-                <button onClick={() => handlePwdDelete(item.id)}>Delete</button>
+            <div className='flex justify-around'>
+              <button className='p-2' onClick={() => setShowPrivatePassword(!showPrivatePassword)} title={showPrivatePassword? "Hide" : "Show"}>{showPrivatePassword? <TbEye size='24'/> : <TbEyeOff size='24'/>}</button>
+              <button className='p-2' onClick={() => setShowEdit(!showEdit)} title="Edit"><FaEdit size='24'/></button>
             </div>
         </td>
       </tr>
       <Modal open={showEdit}>
-        <button className='p-2' onClick={() => handlePwdDelete(item.id)}><MdDelete size='24' /></button>
+        <button className='p-2' onClick={() => handlePwdDelete(item.id)} title="Delete Entry"><MdDelete size='24'/></button>
         <form onSubmit={(e) => handlePwdEdit(e)}>
           <input placeholder='Name' type="text" name="name" id="name" defaultValue={item.name} required></input>
           <input placeholder='Website' type="text" name="website" id="website" defaultValue={item.website} required />
           <input placeholder='Username' type="text" name="username" id="username" defaultValue={item.username} required />
           <input placeholder='Password' type="text" name="password" id="password" defaultValue={item.password} required />
           <input placeholder='Comment' type="text" name="comment" id="comment" defaultValue={item.comment} />
-          <button type="submit" className='ml-1 p-2'><MdDone size='24' /></button>
-          <button className='p-2' type='reset' onClick={() => setShowEdit(false)}><MdCancel size='24' /></button>
+          <button type="submit" className='ml-1 p-2' title="Validate Edit"><MdDone size='24'/></button>
+          <button className='p-2' type='reset' onClick={() => setShowEdit(false)} title="Cancel Edit"><MdCancel size='24'/></button>
         </form>
       </Modal>
     </>

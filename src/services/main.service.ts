@@ -12,8 +12,6 @@ export function isDataStored(): boolean{
 export function readUserData(): PwdArray{
     try{
         const data = fs.readFileSync(USER_DATA_PATH, 'utf-8');
-        console.log("Data send back from main process")
-        console.log(data);
         return JSON.parse(data);
     } catch(err){
         console.log('Error retrieving user data in main process: ', err);

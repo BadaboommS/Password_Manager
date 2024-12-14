@@ -18,7 +18,7 @@ const createWindow = (): void => {
     height: 600,
     width: 800,
     title: "Bada's Password manager",
-    icon: __dirname + "/img/favicon.png",
+    icon: __dirname + "img/favicon.ico",
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       contextIsolation: true, //Must be true for the context bridge API to work.
