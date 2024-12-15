@@ -37,7 +37,11 @@ function PasswordList() {
         ? (passwordList.map((pwd: PwdItem, i: number) => {
               return (pwd !== null) ? <PasswordItem item={pwd} key={i} editPasswordEntry={editPasswordEntry} deletePasswordEntry={deletePasswordEntry}></PasswordItem> : <></>
           }))
-        : <></>
+        : <>
+            <tr>
+              <th>Password List is empty !</th>
+            </tr>
+          </>
       }
       </tbody>
     </table>
