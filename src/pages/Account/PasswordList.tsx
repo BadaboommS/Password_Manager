@@ -1,10 +1,42 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import PasswordItem from './PasswordItem'
 import { PwdItem } from '../../types/pwdTypes'
 import { PasswordContext } from '../../context/PasswordContextProvider'
 
 function PasswordList() {
   const { passwordList, handlePasswordListChange } = useContext(PasswordContext);
+  const { showAddPwdForm, setShowAddPwdForm } = useState(false);
+
+  function handleAddPasswordEntry(e: React.FormEvent<HTMLFormElement>): void{
+    e.preventDefault();
+
+      if(window.confirm("Valider la modification") === false){
+          return null
+      }
+
+      const form = e.currentTarget;
+      const formElements = form.elements as typeof form.elements & {
+        name: {value :string};
+        website: {value :string};
+        username: {value :string};
+        password: {value :string};
+        comment: {value :string};
+      }
+
+      const newPwd = {
+        id: passwordList[0]? passwordList[passwordList.length - 1].id : 0,
+        name: formElements.name.value,
+        website: formElements.website.value,
+        username: formElements.username.value,
+        password: formElements.password.value,
+        comment: formElements.comment.value
+      };
+
+      setShowAddPwdForm(false);
+
+      const newPwdArray = [...passwordList, newPwd];
+      handlePasswordListChange(newPwdArray);
+  }
 
   function editPasswordEntry(editPwd: PwdItem): void{
     const newPwdArray = [...passwordList];
