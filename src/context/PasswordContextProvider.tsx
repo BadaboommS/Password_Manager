@@ -24,9 +24,13 @@ export default function PasswordContextProvider ({ children }: { children: React
   
   useEffect(() => {
       try{
-        getPwdData().then(d => setPasswordList(d));
+        getPwdData().then(d => {
+          if(d !== null){
+            setPasswordList(d);
+          }
+        });
       }catch(err){
-        console.log(`Error in Context component ${err}`);
+        console.log(`Error in Context: ${err}`);
       }
     }, []);
 

@@ -22,8 +22,12 @@ export function decryptData(encryptedData: Buffer): string{
 
 export function readUserData(): Buffer{
     try{
-        const data = fs.readFileSync(USER_DATA_PATH);
-        return data;
+        if(isDataStored()){
+            const data = fs.readFileSync(USER_DATA_PATH);
+            return data;
+        }else{
+            return null
+        }
     } catch(err){
         console.log('Error retrieving user data in main process: ', err);
         return null;

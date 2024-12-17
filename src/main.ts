@@ -73,10 +73,15 @@ ipcMain.on("writeUserPwdData", (e, pwdData: PwdArray) => {
  ipcMain.handle("getUserPwdData", (e) => {
   try{
     const encryptedData = readUserData();
-    if(isEncryptionAvailable()){
+
+    if(encryptedData === null){
+      return null
+    }else{
+      if(isEncryptionAvailable()){
         const decryptedString = decryptData(encryptedData);
         const decryptedPwdArray = decryptedString.split('-|-').map(e => JSON.parse(e));
         return decryptedPwdArray;
+    }
     }
   }catch(err){
     console.log(`Something went wrong in main process: ${e} - ${err}`);
