@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react'
 import Header from './Header'
 import PasswordList from './PasswordList'
 import { PasswordContext } from '../../context/PasswordContextProvider';
-import { MdCancel, MdDone, MdAdd } from 'react-icons/md';
+import { MdCancel, MdDone, MdAdd, MdSave } from 'react-icons/md';
 import Modal from '../../global/Modal';
 
 function Dashboard() {
-    const { passwordList, handlePasswordListChange } = useContext(PasswordContext);
+    const { passwordList, setPasswordList, changedSinceLastUpdate, setChangedSinceLastUpdate } = useContext(PasswordContext);
     const [ showAddPwdForm, setShowAddPwdForm ] = useState(false);
 
     function handleAddPasswordEntry(e: React.FormEvent<HTMLFormElement>): void{
@@ -37,14 +37,30 @@ function Dashboard() {
         setShowAddPwdForm(false);
 
         const newPwdArray = [...passwordList, newPwd];
-        console.log(newPwdArray);
-        handlePasswordListChange(newPwdArray);
+        setPasswordList(newPwdArray);
+        setChangedSinceLastUpdate(true);
+    }
+
+    function handlePasswordListChange(): void{
+        if(window.confirm("Valider la modification") === false){
+            return null
+        }
+
+        setChangedSinceLastUpdate(false);
+        window.electronAPI.writeUserPwdData(passwordList);
     }
 
     return (
         <div>
             <Header></Header>
-            <button title="Add new password" onClick={() => setShowAddPwdForm(true)}><MdAdd size='24'/></button>
+            <div className='flex'>
+                <button title="Add New Password" onClick={() => setShowAddPwdForm(true)}>
+                    <MdAdd size='24'/>
+                </button>
+                <button title={changedSinceLastUpdate? "Save Password List (change detected)" : "Save Password List"} onClick={() => handlePasswordListChange()}>
+                    <MdSave size='24' className={changedSinceLastUpdate? "text-yellow-500" : "text-green-500"} />
+                </button>
+            </div>
             <Modal open={showAddPwdForm}>
                 <form onSubmit={(e) => handleAddPasswordEntry(e)}>
                     <input placeholder='Name' type="text" name="name" id="name" required></input>
