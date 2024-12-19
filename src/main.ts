@@ -16,7 +16,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
+    height: 800,
     width: 800,
     title: "Bada's Password manager",
     icon: __dirname + "img/favicon.ico",
