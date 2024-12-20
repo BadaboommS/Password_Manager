@@ -4,20 +4,18 @@ import { PwdItem } from '../../types/pwdTypes'
 import { PasswordContext } from '../../context/PasswordContextProvider'
 
 function PasswordList() {
-  const { passwordList, setPasswordList, setChangedSinceLastUpdate } = useContext(PasswordContext);
+  const { passwordList, setPasswordList } = useContext(PasswordContext);
 
   function editPasswordEntry(editPwd: PwdItem): void{
     const newPwdArray = [...passwordList];
     const editPwdIndex = newPwdArray.findIndex((obj:PwdItem) => obj.id === editPwd.id);
     newPwdArray[editPwdIndex] = editPwd;
-    setChangedSinceLastUpdate(true);
     setPasswordList(newPwdArray);
   }
 
   function deletePasswordEntry(deletePwdId: number): void{
     const pwdList = [...passwordList];
     const newPwdArray = pwdList.filter((obj: PwdItem) => obj.id !== deletePwdId);
-    setChangedSinceLastUpdate(true);
     setPasswordList(newPwdArray);
   }
 
@@ -29,6 +27,7 @@ function PasswordList() {
               <caption>Password List</caption>
               <thead>
                 <tr>
+                  <th>N°</th>
                   <th>Name</th>
                   <th>Website</th>
                   <th>Username</th>

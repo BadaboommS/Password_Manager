@@ -6,7 +6,7 @@ import { MdCancel, MdDone, MdAdd, MdSave } from 'react-icons/md';
 import Modal from '../../global/Modal';
 
 function Dashboard() {
-    const { passwordList, setPasswordList, changedSinceLastUpdate, setChangedSinceLastUpdate } = useContext(PasswordContext);
+    const { passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList } = useContext(PasswordContext);
     const [ showAddPwdForm, setShowAddPwdForm ] = useState(false);
 
     function handleAddPasswordEntry(e: React.FormEvent<HTMLFormElement>): void{
@@ -38,7 +38,6 @@ function Dashboard() {
 
         const newPwdArray = [...passwordList, newPwd];
         setPasswordList(newPwdArray);
-        setChangedSinceLastUpdate(true);
     }
 
     function handlePasswordListChange(): void{
@@ -46,8 +45,8 @@ function Dashboard() {
             return null
         }
 
-        setChangedSinceLastUpdate(false);
         window.electronAPI.writeUserPwdData(passwordList);
+        setLastFetchedList(passwordList);
     }
 
     return (

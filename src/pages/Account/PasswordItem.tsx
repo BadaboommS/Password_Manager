@@ -28,11 +28,11 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
 
       const form = e.currentTarget;
       const formElements = form.elements as typeof form.elements & {
-        name: {value :string};
-        website: {value :string};
-        username: {value :string};
-        password: {value :string};
-        comment: {value :string};
+        name: {value: string};
+        website: {value: string};
+        username: {value: string};
+        password: {value: string};
+        comment: {value: string};
       }
 
       const editedPwd = {
@@ -60,16 +60,17 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
   return (
     <>
       <tr>
+        <td>{item.id + 1}</td>
         <td>{item.name}</td>
         <td>{item.website}</td>
         <td>{item.username}</td>
         <td><div className='flex justify-around'><p className={showPrivatePassword? '' : 'password_field'}>{item.password}</p><button onClick={() => copyTextToClipboard(item.password)} title="Copy"><FaCopy size='24'/></button></div></td>
         <td>{item.comment}</td>
         <td>
-            <div className='flex justify-around'>
-              <button className='p-2' onClick={() => setShowPrivatePassword(!showPrivatePassword)} title={showPrivatePassword? "Hide" : "Show"}>{showPrivatePassword? <TbEye size='24'/> : <TbEyeOff size='24'/>}</button>
-              <button className='p-2' onClick={() => setShowEdit(!showEdit)} title="Edit"><FaEdit size='24'/></button>
-            </div>
+          <div className='flex justify-around'>
+            <button className='p-2' onClick={() => setShowPrivatePassword(!showPrivatePassword)} title={showPrivatePassword? "Hide" : "Show"}>{showPrivatePassword? <TbEye size='24'/> : <TbEyeOff size='24'/>}</button>
+            <button className='p-2' onClick={() => setShowEdit(!showEdit)} title="Edit"><FaEdit size='24'/></button>
+          </div>
         </td>
       </tr>
       <Modal open={showEdit}>

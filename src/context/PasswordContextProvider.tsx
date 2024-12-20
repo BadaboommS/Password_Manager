@@ -5,7 +5,7 @@ interface PasswordContextInterface {
   passwordList: PwdArray,
   setPasswordList: (a: PwdArray) => void,
   changedSinceLastUpdate: boolean,
-  setChangedSinceLastUpdate: (a: boolean) => void
+  setLastFetchedList: (a: PwdArray) => void
 }
 
 export const PasswordContext = createContext<PasswordContextInterface>(null);
@@ -25,7 +25,7 @@ export default function PasswordContextProvider ({ children }: { children: React
     }else{
       setChangedSinceLastUpdate(true);
     }
-  }, [passwordList]);
+  }, [passwordList, lastFetchedList]);
   
 
   async function getPwdData(){
@@ -48,7 +48,7 @@ export default function PasswordContextProvider ({ children }: { children: React
 
 
   return (
-    <PasswordContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setChangedSinceLastUpdate }}>
+    <PasswordContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList }}>
       { children }
     </PasswordContext.Provider>
   )
