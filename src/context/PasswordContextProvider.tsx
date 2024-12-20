@@ -18,9 +18,10 @@ export default function PasswordContextProvider ({ children }: { children: React
   const [changedSinceLastUpdate, setChangedSinceLastUpdate] = useState<boolean>(false);
 
   const objectsAreEqual = (o1: object, o2: object): boolean => Object.keys(o1).length === Object.keys(o2).length && Object.keys(o1).every(p => o1[p as keyof typeof o1] === o2[p as keyof typeof o2]);
-
+  const arrayOfObjAreEqual = (arr1 : Array<object>, arr2: Array<object>): boolean => arr1.length === arr2.length && arr1.every((o, index) => objectsAreEqual(o, arr2[index]));
+  
   useEffect(() => {
-    if(passwordList.length === lastFetchedList.length && passwordList.every((o, index) => objectsAreEqual(o, lastFetchedList[index]))){
+    if(arrayOfObjAreEqual(passwordList, lastFetchedList)){
       setChangedSinceLastUpdate(false);
     }else{
       setChangedSinceLastUpdate(true);

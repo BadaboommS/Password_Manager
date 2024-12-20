@@ -5,11 +5,30 @@ import { PasswordContext } from '../../context/PasswordContextProvider'
 
 function PasswordList() {
   const { passwordList, setPasswordList } = useContext(PasswordContext);
+      
+  function editPasswordEntry( event: React.FormEvent<HTMLFormElement>, itemId: number ): void{
 
-  function editPasswordEntry(editPwd: PwdItem): void{
+    const form = event.currentTarget;
+    const formElements = form.elements as typeof form.elements & {
+      name: {value: string};
+      website: {value: string};
+      username: {value: string};
+      password: {value: string};
+      comment: {value: string};
+    }
+
+    const editedPwd = {
+      id: itemId,
+      name: formElements.name.value,
+      website: formElements.website.value,
+      username: formElements.username.value,
+      password: formElements.password.value,
+      comment: formElements.comment.value
+    };
+
     const newPwdArray = [...passwordList];
-    const editPwdIndex = newPwdArray.findIndex((obj:PwdItem) => obj.id === editPwd.id);
-    newPwdArray[editPwdIndex] = editPwd;
+    const editPwdIndex = newPwdArray.findIndex((obj:PwdItem) => obj.id === itemId);
+    newPwdArray[editPwdIndex] = editedPwd;
     setPasswordList(newPwdArray);
   }
 

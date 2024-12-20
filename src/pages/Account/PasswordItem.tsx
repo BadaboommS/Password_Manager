@@ -7,7 +7,7 @@ import Modal from '../../global/Modal';
 
 interface PwdItemPropsInterface{
   item: PwdItem,
-  editPasswordEntry: (item: PwdItem) => void,
+  editPasswordEntry: (event: React.FormEvent<HTMLFormElement>, itemId: number) => void,
   deletePasswordEntry: (id: number) => void
 }
 
@@ -26,26 +26,8 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
           return null
       }
 
-      const form = e.currentTarget;
-      const formElements = form.elements as typeof form.elements & {
-        name: {value: string};
-        website: {value: string};
-        username: {value: string};
-        password: {value: string};
-        comment: {value: string};
-      }
-
-      const editedPwd = {
-        id: item.id,
-        name: formElements.name.value,
-        website: formElements.website.value,
-        username: formElements.username.value,
-        password: formElements.password.value,
-        comment: formElements.comment.value
-      };
-
+      editPasswordEntry(e, item.id);
       setShowEdit(false);
-      editPasswordEntry(editedPwd);
     }
 
     function handlePwdDelete(pwdId: number): void{

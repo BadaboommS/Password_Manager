@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router';
-
 import ALayout from './ALayout';
 import Dashboard from './Dashboard';
 import Error from '../../utils/Error';
