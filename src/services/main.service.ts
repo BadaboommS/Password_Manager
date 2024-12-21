@@ -2,7 +2,7 @@ import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
 
-const USER_DATA_PATH = path.join(app.getPath('userData'));
+const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
 const DATA_STORAGE_PATH = __dirname + '/storage';
 
 export function initMkdir(): void{
@@ -14,7 +14,7 @@ export function initMkdir(): void{
 export function initStorageFile(fileName: string): void{
     const filePath = DATA_STORAGE_PATH + `/${fileName}`;
     if(!fs.existsSync(filePath)){
-        fs.writeFileSync(USER_DATA_PATH, '');
+        fs.writeFileSync(filePath, '');
     }
 }
 
@@ -23,7 +23,7 @@ export async function getStorageFiles(): Promise<string[]>{
 }
 
 export function isDataStored(): boolean{
-    return(USER_DATA_PATH !== null || USER_DATA_PATH !== undefined);
+    return(DEFAULT_USER_DATA_PATH !== null || DEFAULT_USER_DATA_PATH !== undefined);
 }
 
 export function isEncryptionAvailable(): boolean{
@@ -41,7 +41,7 @@ export function decryptData(encryptedData: Buffer): string{
 export function readUserData(): Buffer{
     try{
         if(isDataStored()){
-            const data = fs.readFileSync(USER_DATA_PATH);
+            const data = fs.readFileSync(DEFAULT_USER_DATA_PATH);
             return data;
         }else{
             return null
@@ -53,5 +53,5 @@ export function readUserData(): Buffer{
 }
 
 export function writeUserData(data: Buffer): void{
-    fs.writeFileSync(USER_DATA_PATH, data);
+    fs.writeFileSync(DEFAULT_USER_DATA_PATH, data);
 }
