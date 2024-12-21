@@ -4,7 +4,13 @@
 const { ipcRenderer, contextBridge } = require("electron");
 
 // Expose Api for bridge between main and renderer
-contextBridge.exposeInMainWorld('electronAPI', {
-    writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
-    getUserPwdData: () => ipcRenderer.invoke("getUserPwdData")
-})
+if(process.contextIsolated){
+    try{
+        contextBridge.exposeInMainWorld('electronAPI', {
+            writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
+            getUserPwdData: () => ipcRenderer.invoke("getUserPwdData")
+        })
+    }catch(error){
+        console.log(error);
+    }
+}
