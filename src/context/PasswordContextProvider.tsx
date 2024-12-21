@@ -43,7 +43,7 @@ export default function PasswordContextProvider ({ children }: { children: React
           }
         });
       }catch(err){
-        console.log(`Error in Fetching Context: ${err}`);
+        console.log(`Error in Password Fetching Context: ${err}`);
       }
     }, []);
 

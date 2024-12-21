@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
-const DATA_STORAGE_PATH = __dirname + '/storage';
+const DATA_STORAGE_PATH = path.join(app.getPath('userData'), 'DataStorage');
 
 export function initMkdir(): void{
     if(!fs.existsSync(DATA_STORAGE_PATH)){
@@ -11,15 +11,16 @@ export function initMkdir(): void{
     }
 }
 
-export function initStorageFile(fileName: string): void{
+export function getStorageFiles(): string[]{
+    console.log(DATA_STORAGE_PATH);
+    return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
+}
+
+export function createStorageFile(fileName: string): void{
     const filePath = DATA_STORAGE_PATH + `/${fileName}`;
     if(!fs.existsSync(filePath)){
         fs.writeFileSync(filePath, '');
     }
-}
-
-export async function getStorageFiles(): Promise<string[]>{
-    return await fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
 }
 
 export function isDataStored(): boolean{
