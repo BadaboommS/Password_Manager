@@ -10,8 +10,6 @@ interface PasswordContextInterface {
 
 export const PasswordContext = createContext<PasswordContextInterface>(null);
 
-//const DEF_TEST_CONTEXT = [{"id":0,"name":"Testazz","website":"Test","username":"bada","password":"passwordTest","comment":""},{"id":1,"name":"Test2","website":"Test2","username":"bada2","password":"passwordTest2","comment":""}];
-
 export default function PasswordContextProvider ({ children }: { children: React.ReactNode }) {
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
   const [lastFetchedList, setLastFetchedList] = useState<PwdArray>([]);
@@ -21,11 +19,7 @@ export default function PasswordContextProvider ({ children }: { children: React
   const arrayOfObjAreEqual = (arr1 : Array<object>, arr2: Array<object>): boolean => arr1.length === arr2.length && arr1.every((o, index) => objectsAreEqual(o, arr2[index]));
   
   useEffect(() => {
-    if(arrayOfObjAreEqual(passwordList, lastFetchedList)){
-      setChangedSinceLastUpdate(false);
-    }else{
-      setChangedSinceLastUpdate(true);
-    }
+    arrayOfObjAreEqual(passwordList, lastFetchedList)? setChangedSinceLastUpdate(false) : setChangedSinceLastUpdate(true)
   }, [passwordList, lastFetchedList]);
   
 

@@ -93,7 +93,6 @@ ipcMain.handle("getStorageData", (e) => {
   try{
     initMkdir();
     const storageFilesList = getStorageFiles();
-    console.log('list: ', storageFilesList);
     return storageFilesList;
   }catch(err){
     console.log(`Something went wrong in main process: ${e} - ${err}`);

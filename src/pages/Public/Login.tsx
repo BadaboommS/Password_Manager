@@ -21,7 +21,7 @@ const Login = () => {
         </form>
       </div>
       <div>
-        {(filesList[0])? filesList.map((fileName: string) => <p>{fileName}</p>) : <p>Storage Empty</p>}
+        {(filesList[0])? filesList.map((fileName: string, i: number) => <p key={i}>{fileName}</p>) : <p>Storage Empty</p>}
       </div>
     </>
   )
