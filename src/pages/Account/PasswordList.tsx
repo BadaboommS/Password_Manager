@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import PasswordItem from './PasswordItem'
 import { PwdItem } from '../../types/pwdTypes'
-import { PasswordContext } from '../../context/PasswordContextProvider'
+import { AccountContext } from '../../context/AccountContextProvider'
 
 function PasswordList() {
-  const { passwordList, setPasswordList } = useContext(PasswordContext);
+  const { passwordList, setPasswordList } = useContext(AccountContext);
       
   function editPasswordEntry( event: React.FormEvent<HTMLFormElement>, itemId: number ): void{
 

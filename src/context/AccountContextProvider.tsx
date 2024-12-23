@@ -1,16 +1,16 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
 
-interface PasswordContextInterface {
+interface AccountContextInterface {
   passwordList: PwdArray,
   setPasswordList: (a: PwdArray) => void,
   changedSinceLastUpdate: boolean,
   setLastFetchedList: (a: PwdArray) => void
 }
 
-export const PasswordContext = createContext<PasswordContextInterface>(null);
+export const AccountContext = createContext<AccountContextInterface>(null);
 
-export default function PasswordContextProvider ({ children }: { children: React.ReactNode }) {
+export default function AccountContextProvider ({ children }: { children: React.ReactNode }) {
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
   const [lastFetchedList, setLastFetchedList] = useState<PwdArray>([]);
   const [changedSinceLastUpdate, setChangedSinceLastUpdate] = useState<boolean>(false);
@@ -43,8 +43,8 @@ export default function PasswordContextProvider ({ children }: { children: React
 
 
   return (
-    <PasswordContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList }}>
+    <AccountContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList }}>
       { children }
-    </PasswordContext.Provider>
+    </AccountContext.Provider>
   )
 }

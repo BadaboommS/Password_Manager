@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router';
 import ALayout from './ALayout';
 import Dashboard from './Dashboard';
 import Error from '../../utils/Error';
-import PasswordContextProvider from '../../context/PasswordContextProvider';
+import PasswordContextProvider from '../../context/AccountContextProvider';
 
 const AccountRouter = () => {
   return (

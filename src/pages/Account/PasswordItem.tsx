@@ -24,7 +24,7 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
     function handlePwdEdit(e: React.FormEvent<HTMLFormElement>): void{
       e.preventDefault();
 
-      if(window.confirm("Valider la modification") === false){
+      if(window.confirm("Confirm Edit ?") === false){
           return null
       }
 
@@ -33,7 +33,7 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
     }
 
     function handlePwdDelete(pwdId: number): void{
-      if(window.confirm("Valider la suppression ?") === false){
+      if(window.confirm("Confirm Delete ?") === false){
         return null
       }
       
