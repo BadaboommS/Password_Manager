@@ -6,7 +6,7 @@ export default function PublicContextProvider ({ children }: { children: React.R
   const [filesList, setFilesList] = useState<string[]>([]);
 
   async function getStorageData(){
-    return await window.electronAPI.getStorageData();
+    return await window.electronAPI.getStorageFileData();
   }
 
   useEffect(() => {

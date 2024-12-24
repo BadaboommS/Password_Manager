@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
-
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-const { ipcRenderer, contextBridge } = require("electron");
+import { ParamsInterface } from "./types/paramsTypes";
+import { ipcRenderer, contextBridge } from "electron";
 
 // Expose Api for bridge between main and renderer
 if(process.contextIsolated){
@@ -9,8 +9,9 @@ if(process.contextIsolated){
         contextBridge.exposeInMainWorld('electronAPI', {
             writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
             getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
-            getStorageData: () => ipcRenderer.invoke("getStorageData"),
-            getParams: () => ipcRenderer.invoke("getParams")
+            getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),
+            getFileParams: () => ipcRenderer.invoke("getFileParams"),
+            setFileParams: (newParams: ParamsInterface) => ipcRenderer.send("setFileParams", newParams)
         })
     }catch(error){
         console.log(error);

@@ -88,7 +88,7 @@ export function readUserData(): Buffer{
     }
 }
 
-export function writeUserData(data: string): void{
+export function writeUserData(data: string ): void{
     try{
         const encryptedData = encryptData(data);
         fs.writeFileSync(DEFAULT_USER_DATA_PATH, encryptedData);

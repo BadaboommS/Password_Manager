@@ -4,10 +4,11 @@ import { ParamsInterface } from '../types/paramsTypes';
 
 interface AccountContextInterface {
   passwordList: PwdArray,
-  setPasswordList: (a: PwdArray) => void,
+  setPasswordList: (newPwdArray: PwdArray) => void,
   changedSinceLastUpdate: boolean,
-  setLastFetchedList: (a: PwdArray) => void,
-  fileParams: ParamsInterface
+  setLastFetchedList: (pwdArray: PwdArray) => void,
+  fileParams: ParamsInterface,
+  setFileParams: (params: ParamsInterface) => void
 }
 
 export const AccountContext = createContext<AccountContextInterface>(null);
@@ -18,10 +19,11 @@ export default function AccountContextProvider ({ children }: { children: React.
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
   const [lastFetchedList, setLastFetchedList] = useState<PwdArray>([]);
   // Fetch Data
-  async function getPwdData(){ return await window.electronAPI.getUserPwdData(); }
+  async function fetchPwdData(){ return await window.electronAPI.getUserPwdData(); }
+
   useEffect(() => {
     try{
-      getPwdData().then(fetchedData => {
+      fetchPwdData().then(fetchedData => {
         if(fetchedData !== null){
           setPasswordList(fetchedData);
           setLastFetchedList(fetchedData);
@@ -44,7 +46,7 @@ export default function AccountContextProvider ({ children }: { children: React.
   }, [passwordList, lastFetchedList]);
   
   // Fetch Params
-  const [fileParams, setFileParams] = useState<ParamsInterface>({
+  const [fileParams, setFileParams] = useState<ParamsInterface>({ // DEFAULT_PARAMS
       length: 20,
       selectedSet: {
           setNumber: true,
@@ -57,13 +59,14 @@ export default function AccountContextProvider ({ children }: { children: React.
       }
   });
 
-  async function getFileParams(){ return await window.electronAPI.getParams(); }
+  async function fetchFileParams(){ return await window.electronAPI.getFileParams(); }
 
   useEffect(() => {
     try{
-      getFileParams().then((fetchedParams) => {
-        setFileParams(fetchedParams);
-        console.log(fileParams);
+      fetchFileParams().then((fetchedParams) => {
+        if(!(Object.keys(fetchedParams).length === 0 && fetchedParams.constructor === Object)){
+          setFileParams(fetchedParams);
+        }
       })
     }catch(err){
       console.log(`Error in Params Fetching Context: ${err}`);
@@ -71,7 +74,7 @@ export default function AccountContextProvider ({ children }: { children: React.
   }, []);
 
   return (
-    <AccountContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList, fileParams }}>
+    <AccountContext.Provider value={{ passwordList, setPasswordList, changedSinceLastUpdate, setLastFetchedList, fileParams, setFileParams }}>
       { children }
     </AccountContext.Provider>
   )
