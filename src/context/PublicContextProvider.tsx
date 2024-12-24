@@ -10,16 +10,16 @@ export default function PublicContextProvider ({ children }: { children: React.R
   }
 
   useEffect(() => {
-      try{
-        getStorageData().then(fetchedData => {
-          if(fetchedData !== null){
-            setFilesList(fetchedData);
-          }
-        });
-      }catch(err){
-        console.log(`Error in Public Fetching Context: ${err}`);
-      }
-    }, []);
+    try{
+      getStorageData().then(fetchedData => {
+        if(fetchedData !== null){
+          setFilesList(fetchedData);
+        }
+      });
+    }catch(err){
+      console.log(`Error in Public Fetching Context: ${err}`);
+    }
+  }, []);
 
 
   return (
