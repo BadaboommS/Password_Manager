@@ -9,7 +9,8 @@ if(process.contextIsolated){
         contextBridge.exposeInMainWorld('electronAPI', {
             writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
             getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
-            getStorageData: () => ipcRenderer.invoke("getStorageData")
+            getStorageData: () => ipcRenderer.invoke("getStorageData"),
+            getParams: () => ipcRenderer.invoke("getParams")
         })
     }catch(error){
         console.log(error);

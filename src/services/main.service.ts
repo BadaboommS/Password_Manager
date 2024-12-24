@@ -5,21 +5,40 @@ import fs from 'fs';
 const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
 const DATA_STORAGE_PATH = path.join(app.getPath('userData'), 'DataStorage');
 
+function displayFunctionName(){
+    return displayFunctionName.caller.name
+}
+
 export function initMkdir(): void{
-    if(!fs.existsSync(DATA_STORAGE_PATH)){
-        fs.mkdirSync(DATA_STORAGE_PATH)
+    try{
+        if(!fs.existsSync(DATA_STORAGE_PATH)){
+            fs.mkdirSync(DATA_STORAGE_PATH)
+        }
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
     }
 }
 
 export function getStorageFiles(): string[]{
-    console.log(DATA_STORAGE_PATH);
-    return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
+    try{
+        console.log(DATA_STORAGE_PATH);
+        return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
+    }
 }
 
 export function createStorageFile(fileName: string): void{
-    const filePath = DATA_STORAGE_PATH + `/${fileName}`;
-    if(!fs.existsSync(filePath)){
-        fs.writeFileSync(filePath, '');
+    try{
+        const filePath = DATA_STORAGE_PATH + `/${fileName}`;
+        if(!fs.existsSync(filePath)){
+            fs.writeFileSync(filePath, '');
+        }
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
     }
 }
 
@@ -28,15 +47,31 @@ export function isDataStored(): boolean{
 }
 
 export function isEncryptionAvailable(): boolean{
-    return safeStorage.isEncryptionAvailable();
+    try{
+        return safeStorage.isEncryptionAvailable();
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
+    }
 }
 
 export function encryptData(data: string): Buffer{
-    return safeStorage.encryptString(data);
+    try{
+        return safeStorage.encryptString(data);
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
+    }
+    
 }
 
 export function decryptData(encryptedData: Buffer): string{
-    return safeStorage.decryptString(encryptedData);
+    try{
+        return safeStorage.decryptString(encryptedData);
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null;
+    }
 }
 
 export function readUserData(): Buffer{
@@ -47,12 +82,37 @@ export function readUserData(): Buffer{
         }else{
             return null
         }
-    } catch(err){
-        console.log('Error retrieving user data in main process: ', err);
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
         return null;
     }
 }
 
-export function writeUserData(data: Buffer): void{
-    fs.writeFileSync(DEFAULT_USER_DATA_PATH, data);
+export function writeUserData(data: string): void{
+    try{
+        const encryptedData = encryptData(data);
+        fs.writeFileSync(DEFAULT_USER_DATA_PATH, encryptedData);
+    }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}`);
+        return null
+    }
+}
+
+export function getEncryptedInfo(objectKey: string): string {
+    try{
+      const encryptedData = readUserData();
+  
+      if(encryptedData === null){
+        return null
+      }else{
+        if(isEncryptionAvailable()){
+          const decryptedString = decryptData(encryptedData);
+          const decryptedInfo = JSON.parse(decryptedString)[objectKey];
+          return decryptedInfo;
+      }
+      }
+    }catch(err){
+      console.log(`Something went wrong in ${displayFunctionName()}`);
+      return null
+    }
 }
