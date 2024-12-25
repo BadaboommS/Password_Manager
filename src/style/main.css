@@ -25,23 +25,38 @@ table td {
     padding: 5px;
 }
 
-/* [title] {
-    position: relative;
+/* Password hide/show class */
+.password_field{
+    -webkit-text-security:disc; 
 }
 
-[title]:after {
-    content: attr(title);
-    position: absolute;
-    left: 50%;
-    bottom: 100%;
-    background-color: black;
-    color: white;
-    width: max-content;
-    padding: 0.25em;
-    opacity: 0;
-    -webkit-transition: opacity 0.2s ease-in-out;
+/* Menu up and down arrow */
+input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
 }
 
-[title]:hover:after {
-    opacity: 1;
-} */
+/* Loading Modal */
+.lds-dual-ring {
+    display: flex;
+    justify-content: center;
+    height: 80px;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -1,13 +1,3 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-
-/* Password hide/show class */
-.password_field{
-    -webkit-text-security:disc; 
-}
-
-/* Menu up and down arrow */
-input[type=number]::-webkit-inner-spin-button {
-    opacity: 1
-}

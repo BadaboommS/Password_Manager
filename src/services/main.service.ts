@@ -1,6 +1,7 @@
 import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import { FileInterface, getActiveFileName } from './activeFile.service';
 
 const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
 const DATA_STORAGE_PATH = path.join(app.getPath('userData'), 'DataStorage');
@@ -22,7 +23,6 @@ export function initMkdir(): void{
 
 export function getStorageFiles(): string[]{
     try{
-        console.log(DATA_STORAGE_PATH);
         return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
     }catch(err){
         console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
@@ -73,10 +73,10 @@ export function decryptData(encryptedData: Buffer): string{
     }
 }
 
-export function readUserData(): Buffer{
+export function readUserData(fileName: string): Buffer{
     try{
         if(isDataStored()){
-            const data = fs.readFileSync(DEFAULT_USER_DATA_PATH);
+            const data = fs.readFileSync(path.join(app.getPath('userData'), `DataStorage/${fileName}`));
             return data;
         }else{
             return null
@@ -87,7 +87,7 @@ export function readUserData(): Buffer{
     }
 }
 
-export function writeUserData(data: string ): void{
+export function writeUserData(data: string): void{
     try{
         const encryptedData = encryptData(data);
         fs.writeFileSync(DEFAULT_USER_DATA_PATH, encryptedData);
@@ -97,21 +97,42 @@ export function writeUserData(data: string ): void{
     }
 }
 
-export function getEncryptedInfo(objectKey: string): string {
+export function getEncryptedInfo<K extends keyof FileInterface>(objectKey: K): FileInterface[K] {
     try{
-      const encryptedData = readUserData();
-  
-      if(encryptedData === null){
+        const activeFile = getActiveFileName();
+        const encryptedData = readUserData(activeFile);
+    
+        if(encryptedData === null){
+            return null
+        }else{
+            if(isEncryptionAvailable()){
+            const decryptedString = decryptData(encryptedData);
+            const decryptedInfo = JSON.parse(decryptedString)[objectKey];
+            return decryptedInfo;
+        }
+        }
+        }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null
-      }else{
-        if(isEncryptionAvailable()){
-          const decryptedString = decryptData(encryptedData);
-          const decryptedInfo = JSON.parse(decryptedString)[objectKey];
-          return decryptedInfo;
-      }
-      }
-    }catch(err){
-      console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
-      return null
-    }
+        }
+}
+
+export function getFullEncryptedInfo(selectedFile: string): FileInterface {
+    try{
+        const encryptedData = readUserData(selectedFile);
+        console.log(encryptedData);
+    
+        if(encryptedData === null){
+            return null
+        }else{
+            if(isEncryptionAvailable()){
+            const decryptedString = decryptData(encryptedData);
+            const decryptedInfo = JSON.parse(decryptedString);
+            return decryptedInfo;
+        }
+        }
+        }catch(err){
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        return null
+        }
 }

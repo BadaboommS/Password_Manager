@@ -7,11 +7,17 @@ import { ipcRenderer, contextBridge } from "electron";
 if(process.contextIsolated){
     try{
         contextBridge.exposeInMainWorld('electronAPI', {
+            // Main.on
+            setActiveFile: (fileName: string) => ipcRenderer.send("setActiveFile", fileName),
+            resetActiveFile: () => ipcRenderer.send("resetActiveFile"),
             writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
-            getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
+            setFileParams: (newParams: ParamsInterface) => ipcRenderer.send("setFileParams", newParams),
+
+            // Main.handle
             getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),
+            checkMasterKey: (encodedKey: string) => ipcRenderer.invoke("checkMasterKey", encodedKey),
+            getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
             getFileParams: () => ipcRenderer.invoke("getFileParams"),
-            setFileParams: (newParams: ParamsInterface) => ipcRenderer.send("setFileParams", newParams)
         })
     }catch(error){
         console.log(error);
