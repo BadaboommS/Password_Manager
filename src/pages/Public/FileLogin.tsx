@@ -16,7 +16,7 @@ export default function FileLogin() {
         if(!showLogin && selectedFile !== ""){
             setShowLogin(true);
         }
-    }, [selectedFile])
+    }, [selectedFile]);
 
     function handlePasswordSubmit(e: React.FormEvent<HTMLFormElement>){
         e.preventDefault();

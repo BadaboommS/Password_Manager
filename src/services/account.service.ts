@@ -8,7 +8,7 @@ function saveToken (token: string) {
 }
 
 function logout () {
-    localStorage.removeItem('token');
+    localStorage.removeItem('sessionToken');
 }
 
 function isLogged () {
