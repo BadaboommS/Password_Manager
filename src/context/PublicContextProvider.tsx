@@ -17,7 +17,7 @@ export default function PublicContextProvider ({ children }: { children: React.R
         }
       });
     }catch(err){
-      console.log(`Error in Public Fetching Context: ${err}`);
+      console.log(`Error in Public Fetching Context: ${err.name} - ${err.message}`);
     }
   }, []);
 

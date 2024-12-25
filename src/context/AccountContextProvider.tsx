@@ -31,7 +31,7 @@ export default function AccountContextProvider ({ children }: { children: React.
         }
       });
     }catch(err){
-      console.log(`Error in Password Fetching Context: ${err}`);
+      console.log(`Error in Password Fetching Context: ${err.name} - ${err.message}`);
     }
   }, []);
 
@@ -69,7 +69,7 @@ export default function AccountContextProvider ({ children }: { children: React.
         }
       })
     }catch(err){
-      console.log(`Error in Params Fetching Context: ${err}`);
+      console.log(`Error in Params Fetching Context: ${err.name} - ${err.message}`);
     }
   }, []);
 

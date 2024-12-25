@@ -15,7 +15,7 @@ export function initMkdir(): void{
             fs.mkdirSync(DATA_STORAGE_PATH)
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -25,7 +25,7 @@ export function getStorageFiles(): string[]{
         console.log(DATA_STORAGE_PATH);
         return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -37,7 +37,7 @@ export function createStorageFile(fileName: string): void{
             fs.writeFileSync(filePath, '');
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -50,7 +50,7 @@ export function isEncryptionAvailable(): boolean{
     try{
         return safeStorage.isEncryptionAvailable();
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -59,17 +59,16 @@ export function encryptData(data: string): Buffer{
     try{
         return safeStorage.encryptString(data);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
-    
 }
 
 export function decryptData(encryptedData: Buffer): string{
     try{
         return safeStorage.decryptString(encryptedData);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -83,7 +82,7 @@ export function readUserData(): Buffer{
             return null
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
     }
 }
@@ -93,7 +92,7 @@ export function writeUserData(data: string ): void{
         const encryptedData = encryptData(data);
         fs.writeFileSync(DEFAULT_USER_DATA_PATH, encryptedData);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}`);
+        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null
     }
 }
@@ -112,7 +111,7 @@ export function getEncryptedInfo(objectKey: string): string {
       }
       }
     }catch(err){
-      console.log(`Something went wrong in ${displayFunctionName()}`);
+      console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
       return null
     }
 }
