@@ -7,6 +7,8 @@ ToDoList:
 5. [X] Logout button in account.
 6. [ ] Fix some text input not working on second use.
 7. [ ] Add File List css.
-8. [ ] Add more File List Info.
+8. [X] Add more File List Info.
 9. [ ] Add file create.
 10. [ ] Rework data encryption for more security.
+11. [ ] Remove Master key from active file (only needed in pwdcheck).
+12. [ ] Change File list Date display.

@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { GeneralContext } from '../../context/GeneralContextProvider';
+import { StorageDataInfoInterface } from '../../types/mainProcessTypes';
 
 
-export default function FileList({list}: {list: string[]}) {
+export default function FileList({ fileList }: { fileList: StorageDataInfoInterface[] }) {
     const { setSelectedFile } = useContext(GeneralContext);
 
     function handleSetActiveFile(selectedFile: string): void{
@@ -11,7 +12,7 @@ export default function FileList({list}: {list: string[]}) {
 
     return (
         <>
-            {(list[0])
+            {(fileList[0])
                 ?   <table>
                         <thead>
                             <tr>
@@ -21,12 +22,12 @@ export default function FileList({list}: {list: string[]}) {
                             </tr>
                         </thead>
                         <tbody>
-                            {list.map((fileName: string, i: number) => {
+                            {fileList.map((file: StorageDataInfoInterface, i: number) => {
                                 return(
-                                    <tr key={i}>
-                                        <td onClick={() => handleSetActiveFile(fileName)}>{fileName}</td>
-                                        {/* <td>{fileInfo.lastModified}</td>
-                                        <td>{fileInfo.size}</td> */}
+                                    <tr key={i} onClick={() => handleSetActiveFile(file.fileName)} className='hover:cursor-pointer'>
+                                        <td>{file.fileName}</td>
+                                        <td>{file.fileModified.toString()}</td>
+                                        <td>{file.fileSize}</td>
                                     </tr>
                                 )
                             })}

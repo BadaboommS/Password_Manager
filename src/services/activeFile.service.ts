@@ -1,62 +1,36 @@
-import { PwdArray } from '../types/pwdTypes';
-import { ParamsInterface } from '../types/paramsTypes';
-
-export interface FileInterface {
-    masterKey: string,
-    params: ParamsInterface,
-    pwdList: PwdArray
-}
-
-const DEFAULT_FILE = '';
-const DEFAUT_FILE_DATA: FileInterface = {
-    masterKey: "",
-    params: {
-        length: 20,
-        selectedSet: {
-            setNumber: true,
-            setUppercase: true,
-            setLowercase: true,
-            setMinus: false,
-            setUnderline: false,
-            setSpecial: false,
-            setBrackets: false,
-        }
-    },
-    pwdList: []
-};
+import { ActiveFileInterface, DEFAULT_FILE, DEFAULT_FILE_DATA } from "../types/mainProcessTypes";
 
 let activeFile = DEFAULT_FILE;
-let activeFileData: FileInterface = DEFAUT_FILE_DATA;
+let activeFileData: ActiveFileInterface = DEFAULT_FILE_DATA;
 
-function showActualFile(){
+/* function showActualFile(){
     console.log("Active file: ", activeFile);
     console.log("Active Data: ", activeFileData);
-}
+} */
 
 // GET
 export function getActiveFileName(): string{
     return activeFile;
 }
 
-export function getFullActiveFileData(): FileInterface{
+export function getFullActiveFileData(): ActiveFileInterface{
     return activeFileData;
 }
 
-export function getActiveFileData<K extends keyof FileInterface>(objKey: K): FileInterface[K]{
+export function getActiveFileData<K extends keyof ActiveFileInterface>(objKey: K): ActiveFileInterface[K]{
     return activeFileData[objKey];
 }
 
 // SET
-export function setActiveFileData<K extends keyof FileInterface>(objKey: K, newData: FileInterface[K]): void{
+export function setActiveFileData<K extends keyof ActiveFileInterface>(objKey: K, newData: ActiveFileInterface[K]): void{
     activeFileData[objKey] = newData;
 }
 
-export function updateActiveFile( activeF: string = DEFAULT_FILE, data: FileInterface = DEFAUT_FILE_DATA): void{
+export function updateActiveFile( activeF: string = DEFAULT_FILE, data: ActiveFileInterface = DEFAULT_FILE_DATA): void{
     activeFile = activeF;
     activeFileData = {
         masterKey: data.masterKey,
         params: data.params,
         pwdList: data.pwdList
     }
-    showActualFile();
 }

@@ -1,5 +1,5 @@
 import { PwdArray } from "./types/pwdTypes"
-import { ParamsInterface } from "./types/paramsTypes"
+import { ParamsInterface, StorageDataInfoInterface } from "./types/mainProcessTypes"
 
 export interface IElectronAPI {
     // Main.on
@@ -9,7 +9,7 @@ export interface IElectronAPI {
     setFileParams: (newParams: ParamsInterface) => void,
 
     // Main.handle
-    getStorageFileData: () => Promise<string[]>,
+    getStorageFileData: () => Promise<StorageDataInfoInterface[]>,
     checkMasterKey: (encodedKey: string) => Promise<string>,
     getUserPwdData: () => Promise<PwdArray>,
     getFileParams: () => Promise<ParamsInterface>,    

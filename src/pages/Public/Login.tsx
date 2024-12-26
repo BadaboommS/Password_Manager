@@ -10,7 +10,7 @@ export default function Login () {
     <>
       {(filesList[0])
         ? <>
-            <FileList list={filesList}/>
+            <FileList fileList={ filesList }/>
             <FileLogin />
           </>
         

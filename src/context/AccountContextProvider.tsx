@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
-import { ParamsInterface } from '../types/paramsTypes';
+import { ParamsInterface } from '../types/mainProcessTypes';
 
 interface AccountContextInterface {
   passwordList: PwdArray,

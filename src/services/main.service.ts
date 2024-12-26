@@ -1,7 +1,8 @@
 import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
-import { FileInterface, getActiveFileName } from './activeFile.service';
+import { getActiveFileName } from './activeFile.service';
+import { StorageDataInfoInterface, ActiveFileInterface } from '../types/mainProcessTypes';
 
 const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
 const DATA_STORAGE_PATH = path.join(app.getPath('userData'), 'DataStorage');
@@ -21,9 +22,19 @@ export function initMkdir(): void{
     }
 }
 
-export function getStorageFiles(): string[]{
+export function getStorageFilesInfo(): StorageDataInfoInterface[]{
     try{
-        return fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
+        const filesNameArray = fs.readdirSync(DATA_STORAGE_PATH, { encoding: 'utf-8', withFileTypes: false });
+        const filesInfoResult = [];
+        for(const file of filesNameArray){
+            const newFile = {
+                fileName: file,
+                fileSize: fs.statSync(DATA_STORAGE_PATH + '/' + file).size,
+                fileModified: fs.statSync(DATA_STORAGE_PATH + '/' + file).mtime
+            }
+            filesInfoResult.push(newFile);
+        }
+        return filesInfoResult;
     }catch(err){
         console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
         return null;
@@ -97,7 +108,7 @@ export function writeUserData(data: string): void{
     }
 }
 
-export function getEncryptedInfo<K extends keyof FileInterface>(objectKey: K): FileInterface[K] {
+export function getEncryptedInfo<K extends keyof ActiveFileInterface>(objectKey: K): ActiveFileInterface[K] {
     try{
         const activeFile = getActiveFileName();
         const encryptedData = readUserData(activeFile);
@@ -112,15 +123,14 @@ export function getEncryptedInfo<K extends keyof FileInterface>(objectKey: K): F
         }
         }
         }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
-        return null
+            console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+            return null
         }
 }
 
-export function getFullEncryptedInfo(selectedFile: string): FileInterface {
+export function getFullEncryptedInfo(selectedFile: string): ActiveFileInterface {
     try{
         const encryptedData = readUserData(selectedFile);
-        console.log(encryptedData);
     
         if(encryptedData === null){
             return null
@@ -132,7 +142,7 @@ export function getFullEncryptedInfo(selectedFile: string): FileInterface {
         }
         }
         }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
-        return null
+            console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+            return null
         }
 }
