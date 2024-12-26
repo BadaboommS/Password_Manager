@@ -3,7 +3,7 @@ import { Outlet } from 'react-router'
 import Menu from './Menu/Menu'
 //import Nav
 
-const ALayout = () => {
+export default function ALayout () {
 
   return (
     <div className='fixed w-screen h-screen top-0 left-0 overflow-y-scroll no-scrollbar'>
@@ -15,5 +15,3 @@ const ALayout = () => {
     </div>
   )
 }
-
-export default ALayout

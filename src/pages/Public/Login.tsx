@@ -5,12 +5,6 @@ import { PublicContext } from '../../context/PublicContextProvider';
 
 export default function Login () {
   const { filesList } = useContext(PublicContext);
-  /* const navigate = useNavigate();
-
-  function handleSubmit(e: React.ChangeEvent<HTMLFormElement>){
-    e.preventDefault();
-    navigate("/account", {replace: true});
-  } */
 
   return (
     <>

@@ -1,6 +1,6 @@
 import PasswordList from './PasswordList'
 
-function Dashboard() {
+export default function Dashboard() {
 
     return (
         <div>
@@ -8,5 +8,3 @@ function Dashboard() {
         </div>
     )
 }
-
-export default Dashboard

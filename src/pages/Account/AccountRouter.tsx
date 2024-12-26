@@ -5,7 +5,7 @@ import Dashboard from './Dashboard';
 import Error from '../../utils/Error';
 import PasswordContextProvider from '../../context/AccountContextProvider';
 
-const AccountRouter = () => {
+export default function AccountRouter () {
   return (
     <PasswordContextProvider>
       <Routes>
@@ -17,5 +17,3 @@ const AccountRouter = () => {
     </PasswordContextProvider>
   )
 }
-
-export default AccountRouter

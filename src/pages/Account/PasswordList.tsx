@@ -3,7 +3,7 @@ import PasswordItem from './PasswordItem'
 import { PwdItem } from '../../types/pwdTypes'
 import { AccountContext } from '../../context/AccountContextProvider'
 
-function PasswordList() {
+export default function PasswordList() {
   const { passwordList, setPasswordList } = useContext(AccountContext);
       
   function editPasswordEntry( event: React.FormEvent<HTMLFormElement>, itemId: number ): void{
@@ -69,5 +69,3 @@ function PasswordList() {
     </>
   )
 }
-
-export default PasswordList

@@ -4,7 +4,7 @@ import Error from '../../utils/Error'
 import Login from './Login'
 import PublicContextProvider from '../../context/PublicContextProvider'
 
-const PublicRouter = () => {
+export default function PublicRouter () {
 
   return (
     <PublicContextProvider>
@@ -16,5 +16,3 @@ const PublicRouter = () => {
     </PublicContextProvider>
   )
 }
-
-export default PublicRouter

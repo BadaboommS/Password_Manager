@@ -13,7 +13,7 @@ interface PwdItemPropsInterface{
   deletePasswordEntry: (id: number) => void
 }
 
-function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: PwdItemPropsInterface) {
+export default function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: PwdItemPropsInterface) {
     const [showPrivatePassword, setShowPrivatePassword] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
 
@@ -86,5 +86,3 @@ function PasswordItem({ item = null, editPasswordEntry, deletePasswordEntry }: P
     </>
   )
 }
-
-export default PasswordItem

@@ -5,7 +5,6 @@ import SettingsControl from './SettingsControl';
 
 export default function Menu (){
     
-
     return (
         <>
             <div className='flex gap-2'>
