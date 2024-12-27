@@ -107,9 +107,8 @@ ipcMain.handle("checkMasterKey", (e, encodedKey) => {
 // On => No return value
 ipcMain.on("setActiveFile", (e, selectedFile: string) => {
   try{
-    console.log(selectedFile);
-      const fileData = getActiveFileEncryptedInfo(selectedFile);
-      updateActiveFile(selectedFile, fileData);
+    const fileData = getActiveFileEncryptedInfo(selectedFile);
+    updateActiveFile(selectedFile, fileData);
   }catch(err){
     console.log(`Something went wrong in setActiveFile main process: ${e} - ${err}`);
   }
