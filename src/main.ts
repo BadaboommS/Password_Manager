@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { writeUserData, isEncryptionAvailable, initMkdir, getStorageFilesInfo, getFullEncryptedInfo } from './services/main.service';
+import { writeUserData, isEncryptionAvailable, initMkdir, getStorageFilesInfo, getActiveFileEncryptedInfo, getEncryptedInfo } from './services/main.service';
 import { PwdArray } from './types/pwdTypes';
 import { ParamsInterface } from './types/mainProcessTypes';
 import { updateActiveFile, getActiveFileData } from './services/activeFile.service';
@@ -93,7 +93,7 @@ ipcMain.handle("getFileParams", (e) => {
 ipcMain.handle("checkMasterKey", (e, encodedKey) => {
   try{
     const decodedKey = Buffer.from(encodedKey, 'base64').toString(); // atob
-    const activeFileMasterKey = getActiveFileData('masterKey');
+    const activeFileMasterKey = getEncryptedInfo('masterKey');
 
     if(decodedKey === activeFileMasterKey){
       return Buffer.from('yes').toString('base64'); //btoa
@@ -108,7 +108,7 @@ ipcMain.handle("checkMasterKey", (e, encodedKey) => {
 ipcMain.on("setActiveFile", (e, selectedFile: string) => {
   try{
     console.log(selectedFile);
-      const fileData = getFullEncryptedInfo(selectedFile);
+      const fileData = getActiveFileEncryptedInfo(selectedFile);
       updateActiveFile(selectedFile, fileData);
   }catch(err){
     console.log(`Something went wrong in setActiveFile main process: ${e} - ${err}`);
@@ -127,7 +127,7 @@ ipcMain.on("writeUserPwdData", (e, pwdData: PwdArray) => {
   try{
     if(isEncryptionAvailable()){
       const newPwdData = { 
-        masterKey: getActiveFileData('masterKey'),
+        masterKey: getEncryptedInfo('masterKey'),
         params: getActiveFileData('params'),
         pwdList: pwdData
       };
@@ -143,7 +143,7 @@ ipcMain.on("setFileParams", (e, newParams: ParamsInterface) => {
   try{
     if(isEncryptionAvailable()){
       const newPwdData = { 
-        masterKey: getActiveFileData('masterKey'),
+        masterKey: getEncryptedInfo('masterKey'),
         params: newParams,
         pwdList: getActiveFileData('pwdList')
       };

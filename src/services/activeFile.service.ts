@@ -29,7 +29,6 @@ export function setActiveFileData<K extends keyof ActiveFileInterface>(objKey: K
 export function updateActiveFile( activeF: string = DEFAULT_FILE, data: ActiveFileInterface = DEFAULT_FILE_DATA): void{
     activeFile = activeF;
     activeFileData = {
-        masterKey: data.masterKey,
         params: data.params,
         pwdList: data.pwdList
     }

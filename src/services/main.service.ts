@@ -2,7 +2,7 @@ import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { getActiveFileName } from './activeFile.service';
-import { StorageDataInfoInterface, ActiveFileInterface } from '../types/mainProcessTypes';
+import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface } from '../types/mainProcessTypes';
 
 const DEFAULT_USER_DATA_PATH = path.join(app.getPath('userData'), 'DataStorage/user_data.json');
 const DATA_STORAGE_PATH = path.join(app.getPath('userData'), 'DataStorage');
@@ -108,7 +108,7 @@ export function writeUserData(data: string): void{
     }
 }
 
-export function getEncryptedInfo<K extends keyof ActiveFileInterface>(objectKey: K): ActiveFileInterface[K] {
+export function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K): FullFileInterface[K] {
     try{
         const activeFile = getActiveFileName();
         const encryptedData = readUserData(activeFile);
@@ -117,10 +117,10 @@ export function getEncryptedInfo<K extends keyof ActiveFileInterface>(objectKey:
             return null
         }else{
             if(isEncryptionAvailable()){
-            const decryptedString = decryptData(encryptedData);
-            const decryptedInfo = JSON.parse(decryptedString)[objectKey];
-            return decryptedInfo;
-        }
+                const decryptedString = decryptData(encryptedData);
+                const decryptedInfo = JSON.parse(decryptedString)[objectKey];
+                return decryptedInfo;
+            }
         }
         }catch(err){
             console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
@@ -128,7 +128,7 @@ export function getEncryptedInfo<K extends keyof ActiveFileInterface>(objectKey:
         }
 }
 
-export function getFullEncryptedInfo(selectedFile: string): ActiveFileInterface {
+export function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
     try{
         const encryptedData = readUserData(selectedFile);
     

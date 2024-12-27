@@ -21,6 +21,11 @@ export interface ParamsInterface {
 
 // Active File
 export interface ActiveFileInterface {
+    params: ParamsInterface,
+    pwdList: PwdArray
+}
+
+export interface FullFileInterface {
     masterKey: string,
     params: ParamsInterface,
     pwdList: PwdArray
@@ -28,7 +33,6 @@ export interface ActiveFileInterface {
 
 export const DEFAULT_FILE = '';
 export const DEFAULT_FILE_DATA: ActiveFileInterface = {
-    masterKey: "",
     params: {
         length: 20,
         selectedSet: {
