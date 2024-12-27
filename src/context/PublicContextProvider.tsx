@@ -14,7 +14,6 @@ export default function PublicContextProvider ({ children }: { children: React.R
     try{
       getStorageData().then(fetchedData => {
         if(fetchedData !== null){
-          console.log(fetchedData);
           setFilesList(fetchedData);
         }
       });

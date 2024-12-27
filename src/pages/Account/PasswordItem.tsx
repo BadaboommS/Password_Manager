@@ -4,7 +4,7 @@ import { TbEyeOff, TbEye } from "react-icons/tb";
 import { MdCancel, MdDelete, MdDone } from "react-icons/md";
 import { PwdItem } from '../../types/pwdTypes';
 import Modal from '../../global/Modal';
-import { generatePassword } from '../../utils/generatePassword';
+/* import { generatePassword } from '../../utils/generatePassword'; */
 
 
 interface PwdItemPropsInterface{
@@ -41,7 +41,7 @@ export default function PasswordItem({ item = null, editPasswordEntry, deletePas
       deletePasswordEntry(pwdId);
     }
 
-    const testGenerate = {
+    /* const testGenerate = {
       length: 20,
       selectedSet: {
           setNumber: true,
@@ -52,12 +52,11 @@ export default function PasswordItem({ item = null, editPasswordEntry, deletePas
           setSpecial: true,
           setBrackets: true
       }
-    }
+    } */
       
   return (
     <>
       <tr>
-        <td>{generatePassword(testGenerate)}</td>
         <td>{item.id + 1}</td>
         <td>{item.name}</td>
         <td>{item.website}</td>
