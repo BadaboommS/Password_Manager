@@ -10,7 +10,7 @@ export interface IElectronAPI {
 
     // Main.handle
     getStorageFileData: () => Promise<StorageDataInfoInterface[]>,
-    checkMasterKey: (encodedKey: string) => Promise<string>,
+    checkMasterKey: (encodedKey: string, fileName: string) => Promise<string>,
     getUserPwdData: () => Promise<PwdArray>,
     getFileParams: () => Promise<ParamsInterface>,    
 }

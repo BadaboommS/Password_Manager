@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { writeUserData, isEncryptionAvailable, initMkdir, getStorageFilesInfo, getActiveFileEncryptedInfo, getEncryptedInfo } from './services/main.service';
+import { isEncryptionAvailable, initMkdir, getStorageFilesInfo, getActiveFileEncryptedInfo, checkMasterKey, writeUserParams, writeUserPwd } from './services/main.service';
 import { PwdArray } from './types/pwdTypes';
 import { ParamsInterface } from './types/mainProcessTypes';
 import { updateActiveFile, getActiveFileData } from './services/activeFile.service';
@@ -72,6 +72,15 @@ ipcMain.handle("getStorageFileData", (e) => {
   }
 })
 
+ipcMain.handle("checkMasterKey", (e, encodedKey: string, fileName: string) => {
+  try{
+    return checkMasterKey(encodedKey, fileName);
+  }catch(err){
+    console.log(`Something went wrong in checkMasterKey main process: ${e} - ${err}`);
+    return null
+  }
+})
+
 ipcMain.handle("getFileParams", (e) => {
   try{
     return getActiveFileData('params');
@@ -86,20 +95,6 @@ ipcMain.handle("getFileParams", (e) => {
     return getActiveFileData('pwdList');
   }catch(err){
     console.log(`Something went wrong in getUserPwdData main process: ${e} - ${err}`);
-    return null
-  }
-})
-
-ipcMain.handle("checkMasterKey", (e, encodedKey) => {
-  try{
-    const decodedKey = Buffer.from(encodedKey, 'base64').toString(); // atob
-    const activeFileMasterKey = getEncryptedInfo('masterKey');
-
-    if(decodedKey === activeFileMasterKey){
-      return Buffer.from('yes').toString('base64'); //btoa
-    }
-  }catch(err){
-    console.log(`Something went wrong in checkMasterKey main process: ${e} - ${err}`);
     return null
   }
 })
@@ -122,16 +117,10 @@ ipcMain.on("resetActiveFile", (e) => {
   }
 })
 
-ipcMain.on("writeUserPwdData", (e, pwdData: PwdArray) => {
+ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray) => {
   try{
     if(isEncryptionAvailable()){
-      const newPwdData = { 
-        masterKey: getEncryptedInfo('masterKey'),
-        params: getActiveFileData('params'),
-        pwdList: pwdData
-      };
-
-      writeUserData(JSON.stringify(newPwdData));
+      writeUserPwd(newPwdData);
     }
   }catch(err){
     console.log(`Something went wrong in writeUserPwdData main process: ${e} - ${err}`);
@@ -141,13 +130,7 @@ ipcMain.on("writeUserPwdData", (e, pwdData: PwdArray) => {
 ipcMain.on("setFileParams", (e, newParams: ParamsInterface) => {
   try{
     if(isEncryptionAvailable()){
-      const newPwdData = { 
-        masterKey: getEncryptedInfo('masterKey'),
-        params: newParams,
-        pwdList: getActiveFileData('pwdList')
-      };
-      
-      writeUserData(JSON.stringify(newPwdData));
+      writeUserParams(newParams);
     }
   }catch(err){
     console.log(`Something went wrong in writeUserPwdData main process: ${e} - ${err}`);

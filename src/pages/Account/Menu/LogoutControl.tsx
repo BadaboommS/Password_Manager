@@ -1,12 +1,20 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GeneralContext } from "../../../context/GeneralContextProvider";
 import { MdExitToApp } from "react-icons/md";
 import { accountService } from "../../../services/account.service";
 import { useNavigate } from "react-router";
 
 export default function LogoutControl() {
-    const { setSelectedFile } = useContext(GeneralContext);
+    const { selectedFile, setSelectedFile } = useContext(GeneralContext);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if(selectedFile !== ""){
+            window.electronAPI.setActiveFile(selectedFile);
+        }else{
+            window.electronAPI.resetActiveFile();
+        }
+    }, [selectedFile]);
 
     function handleLogout(): void{
         if(window.confirm("Logout ?") === false){

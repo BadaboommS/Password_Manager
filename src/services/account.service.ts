@@ -1,6 +1,6 @@
-async function login (password : string): Promise<string> {
+async function login (password: string, fileName: string): Promise<string> {
     const encodedPassword = window.btoa(password);
-    return await window.electronAPI.checkMasterKey(encodedPassword);
+    return await window.electronAPI.checkMasterKey(encodedPassword, fileName);
 }
 
 function saveToken (token: string) {

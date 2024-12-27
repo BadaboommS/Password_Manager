@@ -12,3 +12,5 @@ ToDoList:
 10. [ ] Rework data encryption for more security.
 11. [X] Remove Master key from active file (only needed in pwdcheck).
 12. [ ] Change File list Date display.
+13. [ ] Set active File storage after login ?
+14. [ ] Find a better catch err debuging log.

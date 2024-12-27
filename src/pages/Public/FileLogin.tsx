@@ -23,7 +23,7 @@ export default function FileLogin() {
         setFetchError(false);
         setLoadingModal(true);
 
-        accountService.login(inputPassword)
+        accountService.login(inputPassword, selectedFile)
             .then(token => {
                 accountService.saveToken(window.atob(token));
                 navigate("/account", {replace: true});

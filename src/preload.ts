@@ -15,7 +15,7 @@ if(process.contextIsolated){
 
             // Main.handle
             getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),
-            checkMasterKey: (encodedKey: string) => ipcRenderer.invoke("checkMasterKey", encodedKey),
+            checkMasterKey: (encodedKey: string, fileName: string) => ipcRenderer.invoke("checkMasterKey", encodedKey, fileName),
             getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
             getFileParams: () => ipcRenderer.invoke("getFileParams"),
         })

@@ -3,10 +3,10 @@ import { ActiveFileInterface, DEFAULT_FILE, DEFAULT_FILE_DATA } from "../types/m
 let activeFile = DEFAULT_FILE;
 let activeFileData: ActiveFileInterface = DEFAULT_FILE_DATA;
 
-/* function showActualFile(){
+function showActualFile(){
     console.log("Active file: ", activeFile);
     console.log("Active Data: ", activeFileData);
-} */
+}
 
 // GET
 export function getActiveFileName(): string{
@@ -31,5 +31,6 @@ export function updateActiveFile( activeF: string = DEFAULT_FILE, data: ActiveFi
     activeFileData = {
         params: data.params,
         pwdList: data.pwdList
-    }
+    };
+    showActualFile();
 }
