@@ -1,7 +1,7 @@
 import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
-import { getActiveFileData, getActiveFileName, updateActiveFile } from './activeFile.service';
+import { activeFileService } from './activeFile.service';
 import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface } from '../types/mainProcessTypes';
 import { PwdArray } from '../types/pwdTypes';
 
@@ -15,12 +15,12 @@ function displayFunctionName(){
     return displayFunctionName.caller.name
 }
 
-export function isDataStored(file: string = ""): boolean{
+function isDataStored(file: string = ""): boolean{
     const filePath = getStoragePath(file);
     return(filePath !== null || filePath !== undefined);
 }
 
-export function isEncryptionAvailable(): boolean{
+function isEncryptionAvailable(): boolean{
     try{
         return safeStorage.isEncryptionAvailable();
     }catch(err){
@@ -29,7 +29,7 @@ export function isEncryptionAvailable(): boolean{
     }
 }
 
-export function encryptData(data: string): Buffer{
+function encryptData(data: string): Buffer{
     try{
         return safeStorage.encryptString(data);
     }catch(err){
@@ -38,7 +38,7 @@ export function encryptData(data: string): Buffer{
     }
 }
 
-export function decryptData(encryptedData: Buffer): string{
+function decryptData(encryptedData: Buffer): string{
     try{
         return safeStorage.decryptString(encryptedData);
     }catch(err){
@@ -47,7 +47,7 @@ export function decryptData(encryptedData: Buffer): string{
     }
 }
 
-export function readUserData(fileName: string): Buffer{
+function readUserData(fileName: string): Buffer{
     try{
         if(isDataStored()){
             const data = fs.readFileSync(getStoragePath(fileName));
@@ -61,7 +61,7 @@ export function readUserData(fileName: string): Buffer{
     }
 }
 
-export function writeUserData(stringData: string, file: string): void{
+function writeUserData(stringData: string, file: string): void{
     try{
         const encryptedData = encryptData(stringData);
         fs.writeFileSync(getStoragePath(file), encryptedData);
@@ -72,7 +72,7 @@ export function writeUserData(stringData: string, file: string): void{
 }
 
 // File - Data Functions
-export function initMkdir(): void{
+function initMkdir(): void{
     try{
         if(!fs.existsSync(getStoragePath())){
             fs.mkdirSync(getStoragePath())
@@ -83,7 +83,7 @@ export function initMkdir(): void{
     }
 }
 
-export function createStorageFile(fileName: string): void{
+function createStorageFile(fileName: string): void{
     try{
         const filePath = getStoragePath(fileName);
         if(!fs.existsSync(filePath)){
@@ -95,7 +95,7 @@ export function createStorageFile(fileName: string): void{
     }
 }
 
-export function getStorageFilesInfo(): StorageDataInfoInterface[]{
+function getStorageFilesInfo(): StorageDataInfoInterface[]{
     try{
         const filesNameArray = fs.readdirSync(getStoragePath(), { encoding: 'utf-8', withFileTypes: false });
         const filesInfoResult = [];
@@ -115,10 +115,10 @@ export function getStorageFilesInfo(): StorageDataInfoInterface[]{
 }
 
 // Get Info
-export function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileName: string = ""): FullFileInterface[K] {
+function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileName: string = ""): FullFileInterface[K] {
     try{
         if(fileName === ""){
-            fileName = getActiveFileName();
+            fileName = activeFileService.getActiveFileName();
         }
         const encryptedData = readUserData(fileName);
     
@@ -137,7 +137,7 @@ export function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K
         }
 }
 
-export function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
+function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
     try{
         const encryptedData = readUserData(selectedFile);
     
@@ -156,7 +156,7 @@ export function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInte
         }
 }
 
-export function checkMasterKey(encodedKey: string, fileName: string): string{
+function checkMasterKey(encodedKey: string, fileName: string): string{
     try{
         const decodedKey = Buffer.from(encodedKey, 'base64').toString(); // atob
         const fileMasterKey = getEncryptedInfo('masterKey', fileName);
@@ -171,19 +171,18 @@ export function checkMasterKey(encodedKey: string, fileName: string): string{
     
 }
 
-
 // Set Info
-export function writeUserPwd(pwdData: PwdArray){
+function writeUserPwd(pwdData: PwdArray){
     const newActiveData: ActiveFileInterface = { 
-        params: getActiveFileData('params'),
+        params: activeFileService.getActiveFileData('params'),
         pwdList: pwdData
     };
-    const activeFile = getActiveFileName();
-    updateActiveFile(activeFile, newActiveData);
+    const activeFile = activeFileService.getActiveFileName();
+    activeFileService.updateActiveFile(activeFile, newActiveData);
 
     const newFileData: FullFileInterface = {
         masterKey: getEncryptedInfo("masterKey"),
-        params: getActiveFileData('params'),
+        params: activeFileService.getActiveFileData('params'),
         pwdList: pwdData
     }
 
@@ -191,21 +190,28 @@ export function writeUserPwd(pwdData: PwdArray){
     writeUserData(stringData, activeFile);
 }
 
-
-export function writeUserParams(params: ParamsInterface){
+function writeUserParams(params: ParamsInterface){
     const newActiveData: ActiveFileInterface = { 
         params: params,
-        pwdList: getActiveFileData('pwdList')
+        pwdList: activeFileService.getActiveFileData('pwdList')
     };
-    const activeFile = getActiveFileName();
-    updateActiveFile(activeFile, newActiveData);
+    const activeFile = activeFileService.getActiveFileName();
+    activeFileService.updateActiveFile(activeFile, newActiveData);
 
     const newFileData: FullFileInterface = {
         masterKey: getEncryptedInfo("masterKey"),
         params: params,
-        pwdList: getActiveFileData('pwdList'),
+        pwdList: activeFileService.getActiveFileData('pwdList'),
     }
 
     const stringData = JSON.stringify(newFileData);
     writeUserData(stringData, activeFile);
+}
+
+export const mainServiceFile = {
+    isDataStored, isEncryptionAvailable, initMkdir, createStorageFile, getStorageFilesInfo
+}
+
+export const mainServiceInfo = {
+    getActiveFileEncryptedInfo, checkMasterKey, writeUserPwd, writeUserParams
 }
