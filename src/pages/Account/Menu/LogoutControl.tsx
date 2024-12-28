@@ -10,9 +10,9 @@ export default function LogoutControl() {
 
     useEffect(() => {
         if(selectedFile !== ""){
-            window.electronAPI.setActiveFile(selectedFile);
+            accountService.setActiveFile(selectedFile);
         }else{
-            window.electronAPI.resetActiveFile();
+            accountService.logout();
         }
     }, [selectedFile]);
 
