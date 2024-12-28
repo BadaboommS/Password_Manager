@@ -10,14 +10,14 @@ if(process.contextIsolated){
             // Main.on
             setActiveFile: (fileName: string) => ipcRenderer.send("setActiveFile", fileName),
             resetActiveFile: () => ipcRenderer.send("resetActiveFile"),
-            writeUserPwdData: (newData: string) => ipcRenderer.send("writeUserPwdData", newData),
-            setFileParams: (newParams: ParamsInterface) => ipcRenderer.send("setFileParams", newParams),
+            writeUserPwdData: (newData: string, token: string) => ipcRenderer.send("writeUserPwdData", newData, token),
+            setFileParams: (newParams: ParamsInterface, token: string) => ipcRenderer.send("setFileParams", newParams, token),
 
             // Main.handle
             getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),
             checkMasterKey: (encodedKey: string, fileName: string) => ipcRenderer.invoke("checkMasterKey", encodedKey, fileName),
-            getUserPwdData: () => ipcRenderer.invoke("getUserPwdData"),
-            getFileParams: () => ipcRenderer.invoke("getFileParams"),
+            getUserPwdData: (token: string) => ipcRenderer.invoke("getUserPwdData", token),
+            getFileParams: (token: string) => ipcRenderer.invoke("getFileParams", token),
         })
     }catch(error){
         console.log(error);

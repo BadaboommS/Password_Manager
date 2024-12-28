@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { PwdArray } from '../types/pwdTypes';
 import { ParamsInterface } from '../types/mainProcessTypes';
+import { accountService } from '../services/account.service';
 
 interface AccountContextInterface {
   passwordList: PwdArray,
@@ -19,7 +20,7 @@ export default function AccountContextProvider ({ children }: { children: React.
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
   const [lastFetchedList, setLastFetchedList] = useState<PwdArray>([]);
   // Fetch Data
-  async function fetchPwdData(){ return await window.electronAPI.getUserPwdData(); }
+  async function fetchPwdData(){ return await window.electronAPI.getUserPwdData(accountService.getToken()); }
 
   useEffect(() => {
     try{
@@ -59,7 +60,7 @@ export default function AccountContextProvider ({ children }: { children: React.
       }
   });
 
-  async function fetchFileParams(){ return await window.electronAPI.getFileParams(); }
+  async function fetchFileParams(){ return await window.electronAPI.getFileParams(accountService.getToken()); }
 
   useEffect(() => {
     try{

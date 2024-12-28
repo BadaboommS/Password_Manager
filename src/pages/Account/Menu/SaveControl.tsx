@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { MdSave } from 'react-icons/md';
 import { AccountContext } from '../../../context/AccountContextProvider';
+import { accountService } from '../../../services/account.service';
 
 export default function SaveControl() {
     const { passwordList, changedSinceLastUpdate, setLastFetchedList } = useContext(AccountContext);
@@ -10,7 +11,7 @@ export default function SaveControl() {
             return null
         }
 
-        window.electronAPI.writeUserPwdData(passwordList);
+        window.electronAPI.writeUserPwdData(passwordList, accountService.getToken());
         setLastFetchedList(passwordList);
     }
 

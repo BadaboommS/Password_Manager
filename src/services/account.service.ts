@@ -11,16 +11,20 @@ function saveToken (token: string) {
     localStorage.setItem('sessionToken', token);
 }
 
-function logout () {
+function getToken (): string{
+    return localStorage.getItem('sessionToken');
+}
+
+function logout (): void {
     window.electronAPI.resetActiveFile();
     localStorage.removeItem('sessionToken');
 }
 
-function isLogged () {
+function isLogged (): boolean {
     const token = localStorage.getItem('sessionToken');
     return !!token
 }
 
 export const accountService = {
-    login, saveToken, logout, isLogged, setActiveFile
+    login, saveToken, getToken, logout, isLogged, setActiveFile
 }

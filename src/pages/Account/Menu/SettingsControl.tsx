@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import Modal from '../../../global/Modal';
 import { MdCancel, MdSettings, MdSave } from 'react-icons/md';
 import { AccountContext } from '../../../context/AccountContextProvider';
+import { accountService } from '../../../services/account.service';
 
 export default function SettingsControl() {
     const { fileParams, setFileParams } = useContext(AccountContext);
@@ -46,7 +47,7 @@ export default function SettingsControl() {
         }
         
         setFileParams(newParams);
-        window.electronAPI.setFileParams(newParams);
+        window.electronAPI.setFileParams(newParams, accountService.getToken());
         setShowParamsModal(false);
     }
 

@@ -1,16 +1,22 @@
 import { ActiveFileInterface, DEFAULT_FILE, DEFAULT_FILE_DATA } from "../types/mainProcessTypes";
 
-let activeFile = DEFAULT_FILE;
+let activeFileName = DEFAULT_FILE;
 let activeFileData: ActiveFileInterface = DEFAULT_FILE_DATA;
+let activeToken: string = '';
 
-function showActualFile(){
-    console.log("Active file: ", activeFile);
-    console.log("Active Data: ", activeFileData);
-}
+/* function showActualFile(){
+    console.log("Active File Name: ", activeFileName);
+    console.log("Active File Data: ", activeFileData);
+    console.log("Active File Token: ", activeToken)
+} */
 
 // GET
+function getActiveFileToken(): string{
+    return activeToken;
+}
+
 function getActiveFileName(): string{
-    return activeFile;
+    return activeFileName;
 }
 
 function getFullActiveFileData(): ActiveFileInterface{
@@ -26,15 +32,19 @@ function setActiveFileData<K extends keyof ActiveFileInterface>(objKey: K, newDa
     activeFileData[objKey] = newData;
 }
 
+function setActiveFileToken(token: string){
+    activeToken = token;
+}
+
 function updateActiveFile( activeF: string = DEFAULT_FILE, data: ActiveFileInterface = DEFAULT_FILE_DATA): void{
-    activeFile = activeF;
+    activeFileName = activeF;
     activeFileData = {
         params: data.params,
         pwdList: data.pwdList
     };
-    showActualFile();
+    //showActualFile();
 }
 
 export const activeFileService = {
-    getActiveFileName, getFullActiveFileData, getActiveFileData, setActiveFileData, updateActiveFile
+    getActiveFileToken, getActiveFileName, getFullActiveFileData, getActiveFileData, setActiveFileToken, setActiveFileData, updateActiveFile
 }

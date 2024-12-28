@@ -81,18 +81,18 @@ ipcMain.handle("checkMasterKey", (e, encodedKey: string, fileName: string) => {
   }
 })
 
-ipcMain.handle("getFileParams", (e) => {
+ipcMain.handle("getFileParams", (e, token: string) => {
   try{
-    return activeFileService.getActiveFileData('params');
+    return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('params') : null;
   }catch(err){
     console.log(`Something went wrong in getFileParams main process: ${e} - ${err}`);
     return null
   }
 })
 
- ipcMain.handle("getUserPwdData", (e) => {
+ ipcMain.handle("getUserPwdData", (e, token: string) => {
   try{
-    return activeFileService.getActiveFileData('pwdList');
+    return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('pwdList') : null;
   }catch(err){
     console.log(`Something went wrong in getUserPwdData main process: ${e} - ${err}`);
     return null
@@ -117,9 +117,9 @@ ipcMain.on("resetActiveFile", (e) => {
   }
 })
 
-ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray) => {
+ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray, token: string) => {
   try{
-    if(mainServiceFile.isEncryptionAvailable()){
+    if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
       mainServiceInfo.writeUserPwd(newPwdData);
     }
   }catch(err){
@@ -127,9 +127,9 @@ ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray) => {
   }
  });
 
-ipcMain.on("setFileParams", (e, newParams: ParamsInterface) => {
+ipcMain.on("setFileParams", (e, newParams: ParamsInterface, token: string) => {
   try{
-    if(mainServiceFile.isEncryptionAvailable()){
+    if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
       mainServiceInfo.writeUserParams(newParams);
     }
   }catch(err){

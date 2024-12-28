@@ -25,7 +25,7 @@ export default function FileLogin() {
 
         accountService.login(inputPassword, selectedFile)
             .then(token => {
-                accountService.saveToken(window.atob(token));
+                accountService.saveToken(token);
                 navigate("/account", {replace: true});
             })
             .catch(err => {

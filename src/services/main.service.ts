@@ -114,6 +114,16 @@ function getStorageFilesInfo(): StorageDataInfoInterface[]{
     }
 }
 
+function generateToken(): string{
+    //To do
+    return Buffer.from("yes").toString('base64');
+}
+
+function checkToken(token: string): boolean{
+    const activeToken = activeFileService.getActiveFileToken();
+    return token === activeToken;
+}
+
 // Get Info
 function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileName: string = ""): FullFileInterface[K] {
     try{
@@ -162,7 +172,9 @@ function checkMasterKey(encodedKey: string, fileName: string): string{
         const fileMasterKey = getEncryptedInfo('masterKey', fileName);
     
         if(decodedKey === fileMasterKey){
-          return Buffer.from('yes').toString('base64'); //btoa
+            const token = generateToken();
+            activeFileService.setActiveFileToken(token);
+            return token;
         }
     }catch(err){
         console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
@@ -213,5 +225,5 @@ export const mainServiceFile = {
 }
 
 export const mainServiceInfo = {
-    getActiveFileEncryptedInfo, checkMasterKey, writeUserPwd, writeUserParams
+    generateToken, checkToken, getActiveFileEncryptedInfo, checkMasterKey, writeUserPwd, writeUserParams
 }

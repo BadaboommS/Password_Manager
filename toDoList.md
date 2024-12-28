@@ -14,4 +14,5 @@ ToDoList:
 12. [ ] Change File list Date display.
 13. [X] Set active File storage after login ?
 14. [ ] Find a better catch err debuging log.
-15. [ ] Add token génération and check before set and get file data: Tokenverification(token) ? Return value : return null;
+15. [X] Add token génération and check before set and get file data: Tokenverification(token) ? Return value : return null;
+16. [ ] Do Generate Token.
