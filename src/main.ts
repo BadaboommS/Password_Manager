@@ -62,77 +62,41 @@ app.on('activate', () => {
 // Data Storage function for main process
 
 // Handler => expect a return value for Renderer
-ipcMain.handle("getStorageFileData", (e) => {
-  try{
-    mainServiceFile.initMkdir();
-    return mainServiceFile.getStorageFilesInfo();
-  }catch(err){
-    console.log(`Something went wrong in getStorageData main process: ${e} - ${err}`);
-    return null
-  }
+ipcMain.handle("getStorageFileData", () => {
+  mainServiceFile.initMkdir();
+  return mainServiceFile.getStorageFilesInfo();
 })
 
 ipcMain.handle("checkMasterKey", (e, encodedKey: string, fileName: string) => {
-  try{
-    return mainServiceInfo.checkMasterKey(encodedKey, fileName);
-  }catch(err){
-    console.log(`Something went wrong in checkMasterKey main process: ${e} - ${err}`);
-    return null
-  }
+  return mainServiceInfo.checkMasterKey(encodedKey, fileName);
 })
 
 ipcMain.handle("getFileParams", (e, token: string) => {
-  try{
-    return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('params') : null;
-  }catch(err){
-    console.log(`Something went wrong in getFileParams main process: ${e} - ${err}`);
-    return null
-  }
+  return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('params') : null;
 })
 
- ipcMain.handle("getUserPwdData", (e, token: string) => {
-  try{
-    return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('pwdList') : null;
-  }catch(err){
-    console.log(`Something went wrong in getUserPwdData main process: ${e} - ${err}`);
-    return null
-  }
+ipcMain.handle("getUserPwdData", (e, token: string) => {
+  return mainServiceInfo.checkToken(token)? activeFileService.getActiveFileData('pwdList') : null;
 })
 
 // On => No return value
 ipcMain.on("setActiveFile", (e, selectedFile: string) => {
-  try{
-    const fileData = mainServiceInfo.getActiveFileEncryptedInfo(selectedFile);
-    activeFileService.updateActiveFile(selectedFile, fileData);
-  }catch(err){
-    console.log(`Something went wrong in setActiveFile main process: ${e} - ${err}`);
-  }
+  const fileData = mainServiceInfo.getActiveFileEncryptedInfo(selectedFile);
+  activeFileService.updateActiveFile(selectedFile, fileData);
 })
 
-ipcMain.on("resetActiveFile", (e) => {
-  try{
-    activeFileService.updateActiveFile();
-  }catch(err){
-    console.log(`Something went wrong in resetActiveFile main process: ${e} - ${err}`);
-  }
+ipcMain.on("resetActiveFile", () => {
+  activeFileService.updateActiveFile();
 })
 
 ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray, token: string) => {
-  try{
-    if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
-      mainServiceInfo.writeUserPwd(newPwdData);
-    }
-  }catch(err){
-    console.log(`Something went wrong in writeUserPwdData main process: ${e} - ${err}`);
+  if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
+    mainServiceInfo.writeUserPwd(newPwdData);
   }
- });
+});
 
 ipcMain.on("setFileParams", (e, newParams: ParamsInterface, token: string) => {
-  try{
-    if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
-      mainServiceInfo.writeUserParams(newParams);
-    }
-  }catch(err){
-    console.log(`Something went wrong in writeUserPwdData main process: ${e} - ${err}`);
+  if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
+    mainServiceInfo.writeUserParams(newParams);
   }
 });

@@ -5,26 +5,45 @@ import { activeFileService } from './activeFile.service';
 import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface } from '../types/mainProcessTypes';
 import { PwdArray } from '../types/pwdTypes';
 
-
 // General Functions
 function getStoragePath(file: string = ''): string{
     return path.join(app.getPath('userData'), `DataStorage/${file}`);
 }
 
-function displayFunctionName(){
-    return displayFunctionName.caller.name
+function logError(error: unknown) {
+    // Si l'erreur a une stack trace (ce qui est souvent le cas pour des erreurs de type Error)
+    if (error instanceof Error) {
+        // Extraire la pile d'appel à partir de l'exception
+        const stackTrace = error.stack.split("\n");
+
+        // Le nom de la fonction appelante est généralement sur la deuxième ligne de la stack trace
+        const callerFunction = stackTrace[1] ? stackTrace[1].trim() : "Inconnu";
+
+        // Afficher l'erreur avec des informations complémentaires
+        console.error(`Erreur capturée dans ${callerFunction}:`);
+        console.error(`Error Name: ${error.name}`);
+        console.error(`Message: ${error.message}`);
+        console.error(`Stack trace: ${error.stack}`);
+    } else {
+        console.error("Erreur sans stack trace ou de type inconnu:", error);
+    }
 }
 
 function isDataStored(file: string = ""): boolean{
-    const filePath = getStoragePath(file);
-    return(filePath !== null || filePath !== undefined);
+    try{
+        const filePath = getStoragePath(file);
+        return(filePath !== null || filePath !== undefined);
+    }catch(err){
+        logError(err);
+        return null
+    }
 }
 
 function isEncryptionAvailable(): boolean{
     try{
         return safeStorage.isEncryptionAvailable();
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -33,7 +52,7 @@ function encryptData(data: string): Buffer{
     try{
         return safeStorage.encryptString(data);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -42,21 +61,16 @@ function decryptData(encryptedData: Buffer): string{
     try{
         return safeStorage.decryptString(encryptedData);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
 
 function readUserData(fileName: string): Buffer{
     try{
-        if(isDataStored()){
-            const data = fs.readFileSync(getStoragePath(fileName));
-            return data;
-        }else{
-            return null
-        }
+        return isDataStored()? fs.readFileSync(getStoragePath(fileName)) : null;
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -66,7 +80,7 @@ function writeUserData(stringData: string, file: string): void{
         const encryptedData = encryptData(stringData);
         fs.writeFileSync(getStoragePath(file), encryptedData);
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null
     }
 }
@@ -78,7 +92,7 @@ function initMkdir(): void{
             fs.mkdirSync(getStoragePath())
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -90,7 +104,7 @@ function createStorageFile(fileName: string): void{
             fs.writeFileSync(filePath, '');
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -109,7 +123,7 @@ function getStorageFilesInfo(): StorageDataInfoInterface[]{
         }
         return filesInfoResult;
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null;
     }
 }
@@ -120,8 +134,13 @@ function generateToken(): string{
 }
 
 function checkToken(token: string): boolean{
-    const activeToken = activeFileService.getActiveFileToken();
-    return token === activeToken;
+    try{
+        const activeToken = activeFileService.getActiveFileToken();
+        return token === activeToken;
+    }catch(err){
+        logError(err);
+        return null
+    }
 }
 
 // Get Info
@@ -142,7 +161,7 @@ function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileN
             }
         }
         }catch(err){
-            console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+            logError(err);
             return null
         }
 }
@@ -161,7 +180,7 @@ function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
         }
         }
         }catch(err){
-            console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+            logError(err);
             return null
         }
 }
@@ -177,7 +196,7 @@ function checkMasterKey(encodedKey: string, fileName: string): string{
             return token;
         }
     }catch(err){
-        console.log(`Something went wrong in ${displayFunctionName()}: ${err.name} - ${err.message}`);
+        logError(err);
         return null
     }
     
@@ -185,39 +204,48 @@ function checkMasterKey(encodedKey: string, fileName: string): string{
 
 // Set Info
 function writeUserPwd(pwdData: PwdArray){
-    const newActiveData: ActiveFileInterface = { 
-        params: activeFileService.getActiveFileData('params'),
-        pwdList: pwdData
-    };
-    const activeFile = activeFileService.getActiveFileName();
-    activeFileService.updateActiveFile(activeFile, newActiveData);
-
-    const newFileData: FullFileInterface = {
-        masterKey: getEncryptedInfo("masterKey"),
-        params: activeFileService.getActiveFileData('params'),
-        pwdList: pwdData
+    try{
+        const newActiveData: ActiveFileInterface = { 
+            params: activeFileService.getActiveFileData('params'),
+            pwdList: pwdData
+        };
+        const activeFile = activeFileService.getActiveFileName();
+        activeFileService.updateActiveFile(activeFile, newActiveData);
+    
+        const newFileData: FullFileInterface = {
+            masterKey: getEncryptedInfo("masterKey"),
+            params: activeFileService.getActiveFileData('params'),
+            pwdList: pwdData
+        }
+    
+        const stringData = JSON.stringify(newFileData);
+        writeUserData(stringData, activeFile);
+    }catch(err){
+        logError(err);
     }
-
-    const stringData = JSON.stringify(newFileData);
-    writeUserData(stringData, activeFile);
+    
 }
 
 function writeUserParams(params: ParamsInterface){
-    const newActiveData: ActiveFileInterface = { 
-        params: params,
-        pwdList: activeFileService.getActiveFileData('pwdList')
-    };
-    const activeFile = activeFileService.getActiveFileName();
-    activeFileService.updateActiveFile(activeFile, newActiveData);
-
-    const newFileData: FullFileInterface = {
-        masterKey: getEncryptedInfo("masterKey"),
-        params: params,
-        pwdList: activeFileService.getActiveFileData('pwdList'),
+    try{
+        const newActiveData: ActiveFileInterface = { 
+            params: params,
+            pwdList: activeFileService.getActiveFileData('pwdList')
+        };
+        const activeFile = activeFileService.getActiveFileName();
+        activeFileService.updateActiveFile(activeFile, newActiveData);
+    
+        const newFileData: FullFileInterface = {
+            masterKey: getEncryptedInfo("masterKey"),
+            params: params,
+            pwdList: activeFileService.getActiveFileData('pwdList'),
+        }
+    
+        const stringData = JSON.stringify(newFileData);
+        writeUserData(stringData, activeFile);
+    }catch(err){
+        logError(err);
     }
-
-    const stringData = JSON.stringify(newFileData);
-    writeUserData(stringData, activeFile);
 }
 
 export const mainServiceFile = {
