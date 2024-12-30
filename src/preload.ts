@@ -1,6 +1,6 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import { ParamsInterface } from "./types/mainProcessTypes";
+import { ParamsInterface, NewFileInterface } from "./types/mainProcessTypes";
 import { ipcRenderer, contextBridge } from "electron";
 
 // Expose Api for bridge between main and renderer
@@ -12,6 +12,7 @@ if(process.contextIsolated){
             resetActiveFile: () => ipcRenderer.send("resetActiveFile"),
             writeUserPwdData: (newData: string, token: string) => ipcRenderer.send("writeUserPwdData", newData, token),
             setFileParams: (newParams: ParamsInterface, token: string) => ipcRenderer.send("setFileParams", newParams, token),
+            createNewFile: (newFileData: NewFileInterface) => ipcRenderer.send("createNewFile", newFileData),
 
             // Main.handle
             getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),

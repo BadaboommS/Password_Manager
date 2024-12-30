@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import FileList from './FileList';
 import FileLogin from './FileLogin';
 import { PublicContext } from '../../context/PublicContextProvider';
+import FileMenu from './FileMenu/FileMenu';
 
 export default function Login () {
   const { filesList } = useContext(PublicContext);
@@ -10,6 +11,7 @@ export default function Login () {
     <>
       {(filesList[0])
         ? <>
+            <FileMenu />
             <FileList fileList={ filesList }/>
             <FileLogin />
           </>

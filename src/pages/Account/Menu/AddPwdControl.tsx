@@ -3,7 +3,7 @@ import Modal from '../../../global/Modal'
 import { MdDone, MdCancel, MdAdd } from 'react-icons/md';
 import { AccountContext } from '../../../context/AccountContextProvider';
 
-export default function AddPasswordFormControl() {
+export default function AddPwdControl() {
     const { passwordList, setPasswordList } = useContext(AccountContext);
     const [ showAddPwdForm, setShowAddPwdForm ] = useState(false);
 

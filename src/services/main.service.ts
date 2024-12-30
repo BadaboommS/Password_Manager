@@ -2,7 +2,7 @@ import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { activeFileService } from './activeFile.service';
-import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface } from '../types/mainProcessTypes';
+import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface, NewFileInterface } from '../types/mainProcessTypes';
 import { PwdArray } from '../types/pwdTypes';
 
 // General Functions
@@ -12,7 +12,7 @@ function getStoragePath(file: string = ''): string{
 
 function logError(error: unknown) {
     // Si l'erreur a une stack trace (ce qui est souvent le cas pour des erreurs de type Error)
-    if (error instanceof Error) {
+    if (error instanceof Error && error.stack) {
         // Extraire la pile d'appel à partir de l'exception
         const stackTrace = error.stack.split("\n");
 
@@ -66,19 +66,15 @@ function decryptData(encryptedData: Buffer): string{
     }
 }
 
-function readUserData(fileName: string): Buffer{
-    try{
-        return isDataStored()? fs.readFileSync(getStoragePath(fileName)) : null;
-    }catch(err){
-        logError(err);
-        return null;
-    }
+function generateToken(): string{
+    //To do
+    return Buffer.from("yes").toString('base64');
 }
 
-function writeUserData(stringData: string, file: string): void{
+function checkToken(token: string): boolean{
     try{
-        const encryptedData = encryptData(stringData);
-        fs.writeFileSync(getStoragePath(file), encryptedData);
+        const activeToken = activeFileService.getActiveFileToken();
+        return token === activeToken;
     }catch(err){
         logError(err);
         return null
@@ -97,11 +93,16 @@ function initMkdir(): void{
     }
 }
 
-function createStorageFile(fileName: string): void{
+function createStorageFile(newFileData: NewFileInterface): void{
     try{
-        const filePath = getStoragePath(fileName);
-        if(!fs.existsSync(filePath)){
-            fs.writeFileSync(filePath, '');
+        const fileName = newFileData.name;
+        const newData: FullFileInterface = {
+            masterKey: newFileData.masterKey,
+            params: newFileData.params,
+            pwdList: []
+        }
+        if(!fs.existsSync(fileName)){
+            writeUserData(JSON.stringify(newData), fileName);
         }
     }catch(err){
         logError(err);
@@ -128,15 +129,20 @@ function getStorageFilesInfo(): StorageDataInfoInterface[]{
     }
 }
 
-function generateToken(): string{
-    //To do
-    return Buffer.from("yes").toString('base64');
+function readUserData(fileName: string): Buffer{
+    try{
+        return isDataStored()? fs.readFileSync(getStoragePath(fileName)) : null;
+    }catch(err){
+        logError(err);
+        return null;
+    }
 }
 
-function checkToken(token: string): boolean{
+function writeUserData(stringData: string, file: string): void{
     try{
-        const activeToken = activeFileService.getActiveFileToken();
-        return token === activeToken;
+        const encryptedData = encryptData(stringData);
+        console.log(getStoragePath(file));
+        fs.writeFileSync(getStoragePath(file), encryptedData);
     }catch(err){
         logError(err);
         return null

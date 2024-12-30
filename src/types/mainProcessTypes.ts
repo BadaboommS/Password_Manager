@@ -19,6 +19,24 @@ export interface ParamsInterface {
     }
 }
 
+// New File
+export interface NewFileInterface {
+    name: string;
+    masterKey : string;
+    params: {
+        length: number,
+        selectedSet: {
+            setNumber: boolean,
+            setUppercase: boolean,
+            setLowercase: boolean,
+            setMinus: boolean,
+            setUnderline: boolean,
+            setSpecial: boolean,
+            setBrackets: boolean,
+        }
+    }
+}
+
 // Active File
 export interface ActiveFileInterface {
     params: ParamsInterface,

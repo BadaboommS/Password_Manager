@@ -1,5 +1,5 @@
 import { PwdArray } from "./types/pwdTypes"
-import { ParamsInterface, StorageDataInfoInterface } from "./types/mainProcessTypes"
+import { ParamsInterface, StorageDataInfoInterface, NewFileInterface } from "./types/mainProcessTypes"
 
 export interface IElectronAPI {
     // Main.on
@@ -7,6 +7,7 @@ export interface IElectronAPI {
     resetActiveFile: () => void,
     writeUserPwdData: (value: PwdArray, token: string) => Promise<void>,
     setFileParams: (newParams: ParamsInterface, token: string) => void,
+    createNewFile: (newFileData: NewFileInterface) => void
 
     // Main.handle
     getStorageFileData: () => Promise<StorageDataInfoInterface[]>,
