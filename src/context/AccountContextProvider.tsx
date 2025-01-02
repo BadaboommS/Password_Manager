@@ -19,8 +19,11 @@ export default function AccountContextProvider ({ children }: { children: React.
   // Password States
   const [passwordList, setPasswordList] = useState<PwdArray>([]);
   const [lastFetchedList, setLastFetchedList] = useState<PwdArray>([]);
+
   // Fetch Data
-  async function fetchPwdData(){ return await window.electronAPI.getUserPwdData(accountService.getToken()); }
+  async function fetchPwdData(){
+    return await window.electronAPI.getUserPwdData(accountService.getToken());
+  }
 
   useEffect(() => {
     try{
@@ -60,7 +63,9 @@ export default function AccountContextProvider ({ children }: { children: React.
       }
   });
 
-  async function fetchFileParams(){ return await window.electronAPI.getFileParams(accountService.getToken()); }
+  async function fetchFileParams(){
+    return await window.electronAPI.getFileParams(accountService.getToken());
+  }
 
   useEffect(() => {
     try{

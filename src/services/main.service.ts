@@ -1,6 +1,7 @@
 import { app, safeStorage } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import { randomBytes } from 'crypto';
 import { activeFileService } from './activeFile.service';
 import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface, NewFileInterface } from '../types/mainProcessTypes';
 import { PwdArray } from '../types/pwdTypes';
@@ -67,8 +68,8 @@ function decryptData(encryptedData: Buffer): string{
 }
 
 function generateToken(): string{
-    //To do
-    return Buffer.from("yes").toString('base64');
+    return randomBytes(32).toString('hex');
+    // Buffer.from("yes").toString('base64');
 }
 
 function checkToken(token: string): boolean{
@@ -112,6 +113,8 @@ function createStorageFile(newFileData: NewFileInterface): void{
 
 function getStorageFilesInfo(): StorageDataInfoInterface[]{
     try{
+        initMkdir();
+
         const filesNameArray = fs.readdirSync(getStoragePath(), { encoding: 'utf-8', withFileTypes: false });
         const filesInfoResult = [];
         for(const file of filesNameArray){
@@ -255,7 +258,7 @@ function writeUserParams(params: ParamsInterface){
 }
 
 export const mainServiceFile = {
-    isDataStored, isEncryptionAvailable, initMkdir, createStorageFile, getStorageFilesInfo
+    isDataStored, isEncryptionAvailable, createStorageFile, getStorageFilesInfo
 }
 
 export const mainServiceInfo = {

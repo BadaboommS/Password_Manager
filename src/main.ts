@@ -63,7 +63,6 @@ app.on('activate', () => {
 
 // Handler => expect a return value for Renderer
 ipcMain.handle("getStorageFileData", () => {
-  mainServiceFile.initMkdir();
   return mainServiceFile.getStorageFilesInfo();
 })
 
