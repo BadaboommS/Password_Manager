@@ -10,9 +10,10 @@ if(process.contextIsolated){
             // Main.on
             setActiveFile: (fileName: string) => ipcRenderer.send("setActiveFile", fileName),
             resetActiveFile: () => ipcRenderer.send("resetActiveFile"),
-            writeUserPwdData: (newData: string, token: string) => ipcRenderer.send("writeUserPwdData", newData, token),
+            setFilePwdData: (newData: string, token: string) => ipcRenderer.send("setFilePwdData", newData, token),
             setFileParams: (newParams: ParamsInterface, token: string) => ipcRenderer.send("setFileParams", newParams, token),
             createNewFile: (newFileData: NewFileInterface) => ipcRenderer.send("createNewFile", newFileData),
+            deleteFile: (fileName: string) => ipcRenderer.send("deleteFile", fileName),
 
             // Main.handle
             getStorageFileData: () => ipcRenderer.invoke("getStorageFileData"),

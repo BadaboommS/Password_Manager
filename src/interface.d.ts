@@ -5,9 +5,10 @@ export interface IElectronAPI {
     // Main.on
     setActiveFile: (fileName: string) => void,
     resetActiveFile: () => void,
-    writeUserPwdData: (value: PwdArray, token: string) => Promise<void>,
+    setFilePwdData: (value: PwdArray, token: string) => Promise<void>,
     setFileParams: (newParams: ParamsInterface, token: string) => void,
-    createNewFile: (newFileData: NewFileInterface) => void
+    createNewFile: (newFileData: NewFileInterface) => void,
+    deleteFile: (fileName: string) => void
 
     // Main.handle
     getStorageFileData: () => Promise<StorageDataInfoInterface[]>,

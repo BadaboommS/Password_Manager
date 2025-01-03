@@ -83,8 +83,12 @@ ipcMain.on("createNewFile", (e, newFileData: NewFileInterface) => {
   mainServiceFile.createStorageFile(newFileData);
 })
 
+ipcMain.on("deleteFile", (e, fileName: string) => {
+  mainServiceFile.deleteStorageFile(fileName);
+})
+
 ipcMain.on("setActiveFile", (e, selectedFile: string) => {
-  const fileData = mainServiceInfo.getActiveFileEncryptedInfo(selectedFile);
+  const fileData = mainServiceInfo.getFileEncryptedInfo(selectedFile);
   activeFileService.updateActiveFile(selectedFile, fileData);
 })
 
@@ -92,7 +96,7 @@ ipcMain.on("resetActiveFile", () => {
   activeFileService.updateActiveFile();
 })
 
-ipcMain.on("writeUserPwdData", (e, newPwdData: PwdArray, token: string) => {
+ipcMain.on("setPwdData", (e, newPwdData: PwdArray, token: string) => {
   if(mainServiceFile.isEncryptionAvailable() && mainServiceInfo.checkToken(token)){
     mainServiceInfo.writeUserPwd(newPwdData);
   }

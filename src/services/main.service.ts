@@ -6,7 +6,18 @@ import { activeFileService } from './activeFile.service';
 import { StorageDataInfoInterface, ActiveFileInterface, FullFileInterface, ParamsInterface, NewFileInterface } from '../types/mainProcessTypes';
 import { PwdArray } from '../types/pwdTypes';
 
-// General Functions
+// General un-exported Functions
+function initMkdir(): void{
+    try{
+        if(!fs.existsSync(getStoragePath())){
+            fs.mkdirSync(getStoragePath())
+        }
+    }catch(err){
+        logError(err);
+        return null;
+    }
+}
+
 function getStoragePath(file: string = ''): string{
     return path.join(app.getPath('userData'), `DataStorage/${file}`);
 }
@@ -40,13 +51,8 @@ function isDataStored(file: string = ""): boolean{
     }
 }
 
-function isEncryptionAvailable(): boolean{
-    try{
-        return safeStorage.isEncryptionAvailable();
-    }catch(err){
-        logError(err);
-        return null;
-    }
+function generateToken(): string{
+    return randomBytes(32).toString('hex');
 }
 
 function encryptData(data: string): Buffer{
@@ -67,27 +73,51 @@ function decryptData(encryptedData: Buffer): string{
     }
 }
 
-function generateToken(): string{
-    return randomBytes(32).toString('hex');
-    // Buffer.from("yes").toString('base64');
+function readUserData(fileName: string): Buffer{
+    try{
+        return isDataStored()? fs.readFileSync(getStoragePath(fileName)) : null;
+    }catch(err){
+        logError(err);
+        return null;
+    }
 }
 
-function checkToken(token: string): boolean{
+function writeUserData(stringData: string, file: string): void{
     try{
-        const activeToken = activeFileService.getActiveFileToken();
-        return token === activeToken;
+        const encryptedData = encryptData(stringData);
+        fs.writeFileSync(getStoragePath(file), encryptedData);
     }catch(err){
         logError(err);
         return null
     }
 }
 
-// File - Data Functions
-function initMkdir(): void{
+function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileName: string = ""): FullFileInterface[K] {
     try{
-        if(!fs.existsSync(getStoragePath())){
-            fs.mkdirSync(getStoragePath())
+        if(fileName === ""){
+            fileName = activeFileService.getActiveFileName();
         }
+        const encryptedData = readUserData(fileName);
+    
+        if(encryptedData === null){
+            return null
+        }else{
+            if(isEncryptionAvailable()){
+                const decryptedString = decryptData(encryptedData);
+                const decryptedInfo = JSON.parse(decryptedString)[objectKey];
+                return decryptedInfo;
+            }
+        }
+        }catch(err){
+            logError(err);
+            return null
+        }
+}
+
+// File Service
+function isEncryptionAvailable(): boolean{
+    try{
+        return safeStorage.isEncryptionAvailable();
     }catch(err){
         logError(err);
         return null;
@@ -105,6 +135,15 @@ function createStorageFile(newFileData: NewFileInterface): void{
         if(!fs.existsSync(fileName)){
             writeUserData(JSON.stringify(newData), fileName);
         }
+    }catch(err){
+        logError(err);
+        return null;
+    }
+}
+
+function deleteStorageFile(fileName: string): void{
+    try{
+        fs.unlinkSync(getStoragePath(fileName));
     }catch(err){
         logError(err);
         return null;
@@ -132,50 +171,18 @@ function getStorageFilesInfo(): StorageDataInfoInterface[]{
     }
 }
 
-function readUserData(fileName: string): Buffer{
+// Data Service
+function checkToken(token: string): boolean{
     try{
-        return isDataStored()? fs.readFileSync(getStoragePath(fileName)) : null;
-    }catch(err){
-        logError(err);
-        return null;
-    }
-}
-
-function writeUserData(stringData: string, file: string): void{
-    try{
-        const encryptedData = encryptData(stringData);
-        console.log(getStoragePath(file));
-        fs.writeFileSync(getStoragePath(file), encryptedData);
+        const activeToken = activeFileService.getActiveFileToken();
+        return token === activeToken;
     }catch(err){
         logError(err);
         return null
     }
 }
 
-// Get Info
-function getEncryptedInfo<K extends keyof FullFileInterface>(objectKey: K, fileName: string = ""): FullFileInterface[K] {
-    try{
-        if(fileName === ""){
-            fileName = activeFileService.getActiveFileName();
-        }
-        const encryptedData = readUserData(fileName);
-    
-        if(encryptedData === null){
-            return null
-        }else{
-            if(isEncryptionAvailable()){
-                const decryptedString = decryptData(encryptedData);
-                const decryptedInfo = JSON.parse(decryptedString)[objectKey];
-                return decryptedInfo;
-            }
-        }
-        }catch(err){
-            logError(err);
-            return null
-        }
-}
-
-function getActiveFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
+function getFileEncryptedInfo(selectedFile: string): ActiveFileInterface {
     try{
         const encryptedData = readUserData(selectedFile);
     
@@ -211,7 +218,6 @@ function checkMasterKey(encodedKey: string, fileName: string): string{
     
 }
 
-// Set Info
 function writeUserPwd(pwdData: PwdArray){
     try{
         const newActiveData: ActiveFileInterface = { 
@@ -257,10 +263,11 @@ function writeUserParams(params: ParamsInterface){
     }
 }
 
+
 export const mainServiceFile = {
-    isDataStored, isEncryptionAvailable, createStorageFile, getStorageFilesInfo
+    isEncryptionAvailable, createStorageFile, deleteStorageFile, getStorageFilesInfo
 }
 
 export const mainServiceInfo = {
-    generateToken, checkToken, getActiveFileEncryptedInfo, checkMasterKey, writeUserPwd, writeUserParams
+    checkToken, getFileEncryptedInfo, checkMasterKey, writeUserPwd, writeUserParams
 }
