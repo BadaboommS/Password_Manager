@@ -56,7 +56,7 @@ export default function FileCreate () {
     return (
       <>
         <button title="Add New Password" onClick={() => setShowAddFile(true)}>
-            <MdAdd size='24'/>
+            <MdAdd size='32' className="hover:bg-green-500 rounded transition-all"/>
         </button>
         <Modal open={showAddFile}>
             <form onSubmit={(e) => handleFileCreate(e)}>

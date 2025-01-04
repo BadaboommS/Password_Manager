@@ -44,16 +44,16 @@ export default function FileLogin() {
         <>
             {selectedFile !== ""
                 ?   <Modal open={showLogin}>
-                        <div className='w-screen h-screen flex items-center justify-center'>
+                        <div className='w-full h-full flex items-center justify-center'>
                             <form className='bg-slate-400 rounded-md p-5 gap-5 border border-solid border-black flex flex-col items-center' onSubmit={(e) => handlePasswordSubmit(e)}>
-                            <h2 className='text-2xl'>Login</h2>
-                            <div className='flex flex-row items-center gap-2'>
-                                <input className="pl-1" type="password" name="password" onChange={(e) => setInputPassword(e.currentTarget.value)} value={inputPassword} autoComplete='off'/>
-                            </div>
-                            <div className='flex gap-2'>
-                                <button type="submit" className='text-white bg-slate-600 p-2 rounded-sm hover:cursor-pointer'>Connexion</button>
-                                <button className='text-white bg-slate-600 p-2 rounded-sm hover:cursor-pointer' onClick={() => handleFileLoginCancel()}>Cancel</button>
-                            </div>
+                                <h2 className='text-2xl'>Login</h2>
+                                <div className='flex flex-row items-center gap-2'>
+                                    <input className="pl-1" type="password" name="password" onChange={(e) => setInputPassword(e.currentTarget.value)} value={inputPassword} autoComplete='off'/>
+                                </div>
+                                <div className='flex gap-2'>
+                                    <button type="submit" className='text-white bg-slate-600 p-2 rounded-sm hover:cursor-pointer'>Connexion</button>
+                                    <button className='text-white bg-slate-600 p-2 rounded-sm hover:cursor-pointer' onClick={() => handleFileLoginCancel()}>Cancel</button>
+                                </div>
                             </form>
                         </div>
                         {fetchError? 
