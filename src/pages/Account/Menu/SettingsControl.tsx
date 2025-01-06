@@ -15,7 +15,6 @@ export default function SettingsControl() {
             return null;
         }
 
-        // Typing
         const form = e.currentTarget;
         const formElements = form.elements as typeof form.elements & {
             params_length: {value: number};
@@ -43,7 +42,6 @@ export default function SettingsControl() {
 
         if(Object.values(newParams.selectedSet).every((bool) => bool === false)){
             alert('None Options have been selected, please select at least one.');
-            return null;
         }
         
         setFileParams(newParams);

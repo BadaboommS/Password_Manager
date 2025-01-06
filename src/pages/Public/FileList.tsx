@@ -27,7 +27,7 @@ export default function FileList() {
                                 return(
                                     <tr key={i} className='hover:cursor-pointer' onClick={() => handleSetActiveFile(file.fileName)}>
                                         <td>{file.fileName}</td>
-                                        <td>{file.fileModified.toString()}</td>
+                                        <td>{file.fileModified.toLocaleDateString()}</td>
                                         <td>{file.fileSize}</td>
                                     </tr>
                                 )

@@ -32,10 +32,9 @@ export default function AddPwdControl() {
             comment: formElements.comment.value
         };
 
-        setShowAddPwdForm(false);
-
         const newPwdArray = [...passwordList, newPwd];
         setPasswordList(newPwdArray);
+        setShowAddPwdForm(false);
     }
 
     return (
@@ -45,13 +44,17 @@ export default function AddPwdControl() {
             </button>
             <Modal open={showAddPwdForm}>
                 <form onSubmit={(e) => handleAddPasswordEntry(e)}>
-                    <input placeholder='Name' type="text" name="name" id="name" required></input>
-                    <input placeholder='Website' type="text" name="website" id="website" required />
-                    <input placeholder='Username' type="text" name="username" id="username" required />
-                    <input placeholder='Password' type="text" name="password" id="password" required />
-                    <input placeholder='Comment' type="text" name="comment" id="comment" />
-                    <button type="submit" className='ml-1 p-2' title="Confirm"><MdDone size='24'/></button>
-                    <button className='p-2' type='reset' onClick={() => setShowAddPwdForm(false)} title="Cancel"><MdCancel size='24'/></button>
+                    <div className='grid grid-cols-2'>
+                        <input placeholder='Name' type="text" name="name" id="name" required></input>
+                        <input placeholder='Website' type="text" name="website" id="website" required />
+                        <input placeholder='Username' type="text" name="username" id="username" required />
+                        <input placeholder='Password' type="text" name="password" id="password" required />
+                        <input placeholder='Comment' type="text" name="comment" id="comment" />
+                    </div>
+                    <div className='flex justify-between'>
+                        <button type="submit" title="Confirm"><MdDone size='32' className='p-2'/></button>
+                        <button type='reset' onClick={() => setShowAddPwdForm(false)} title="Cancel"><MdCancel size='32' className='p-2'/></button>
+                    </div>
                 </form>
             </Modal>
         </>

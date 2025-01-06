@@ -18,7 +18,7 @@ export default function FileLogin() {
         }
     }, [selectedFile]);
 
-    function handlePasswordSubmit(e: React.FormEvent<HTMLFormElement>){
+    function handlePasswordSubmit(e: React.FormEvent<HTMLFormElement>): void{
         e.preventDefault();
         setFetchError(false);
         setLoadingModal(true);
@@ -35,7 +35,7 @@ export default function FileLogin() {
             })
     }
 
-    function handleFileLoginCancel(){
+    function handleFileLoginCancel(): void{
         setShowLogin(false);
         setSelectedFile('');
     }

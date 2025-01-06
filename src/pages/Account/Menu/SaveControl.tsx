@@ -11,13 +11,13 @@ export default function SaveControl() {
             return null
         }
 
-        window.electronAPI.writeUserPwdData(passwordList, accountService.getToken());
+        window.electronAPI.setFilePwdData(passwordList, accountService.getToken());
         setLastFetchedList(passwordList);
     }
 
     return (
         <button title={changedSinceLastUpdate? "Save Password List (change detected)" : "Save Password List"} onClick={() => handlePasswordListChange()}>
-            <MdSave size='24' className={changedSinceLastUpdate? "text-yellow-500" : "text-green-500"} />
+            <MdSave size='32' className={changedSinceLastUpdate? "text-yellow-500" : "text-green-500"} />
         </button>
     )
 }
